@@ -1,11 +1,18 @@
 import LoginForm from "../../forms/LoginForm";
 import Modal from "../../common/PopUp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegisterForm from "../../forms/RegisterForm";
+import LogoutButton from "../../LogoutButton";
+import { isLoggedIn } from "../../../api/auth/key";
 
 function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isLoggedIn());
+  }, [isModalOpen]);
 
   const openModal = (mode: "login" | "register") => {
     setAuthMode(mode);
@@ -14,19 +21,22 @@ function Header() {
 
   return (
     <div className="">
-      <button onClick={() => openModal("login")}>Login</button>
-      <button onClick={() => openModal("register")}>Register</button>
+      {!loggedIn && (
+        <>
+          <button onClick={() => openModal("login")}>Login</button>
+          <button onClick={() => openModal("register")}>Register</button>
+        </>
+      )}
+
+      {loggedIn && <LogoutButton />}
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         {authMode === "login" ? (
           <>
             <LoginForm />
-            <p className="">
+            <p>
               Don't have an account?{" "}
-              <button
-                className=""
-                onClick={() => setAuthMode("register")}
-              >
+              <button onClick={() => setAuthMode("register")}>
                 Register here
               </button>
             </p>
@@ -34,14 +44,9 @@ function Header() {
         ) : (
           <>
             <RegisterForm />
-            <p className="">
+            <p>
               Already have an account?{" "}
-              <button
-                className=""
-                onClick={() => setAuthMode("login")}
-              >
-                Login here
-              </button>
+              <button onClick={() => setAuthMode("login")}>Login here</button>
             </p>
           </>
         )}

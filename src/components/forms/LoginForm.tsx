@@ -1,44 +1,60 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useAuth } from "../../api/auth/useAuth";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+  email: yup.string().email("Please enter a valid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
+});
+
+type LoginFormData = yup.InferType<typeof schema>;
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, loading, error } = useAuth();
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(schema),
+  });
 
-    console.log("Logging in:", { email, password });
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await login(data);
+      setSuccessMessage("You are now logged in!");
+    } catch {
+      setSuccessMessage(""); 
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-xl font-semibold">Login</h2>
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <h2 className="">Login</h2>
 
       <div>
         <label>Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border px-2 py-1 rounded"
-          required
-        />
+        <input type="email" {...register("email")} className="" />
+        <p className="">{errors.email?.message}</p>
       </div>
 
       <div>
         <label>Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border px-2 py-1 rounded"
-          required
-        />
+        <input type="password" {...register("password")} className="" />
+        <p className="">{errors.password?.message}</p>
       </div>
 
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
-        Log In
+      {error && <p className="">Invalid email or password</p>}
+
+      <button type="submit" className="" disabled={loading}>
+        {loading ? "Logging in..." : "Log In"}
       </button>
+
+      {successMessage && <p className="">{successMessage}</p>}
     </form>
   );
 };
