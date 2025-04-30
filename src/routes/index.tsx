@@ -12,7 +12,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="venue/:id" element={<VenuePage />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile/:name" element={<ProfilePage />} />
       </Route>
     </Routes>
     );
