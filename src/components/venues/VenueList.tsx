@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getVenues } from "../../api/venues/getVenues";
 import { Link } from "react-router-dom";
 import ReusableButton from "../ReusableButton";
+import { getAllBookings } from "../../api/bookings/getAllBookings";
+import { isLoggedIn } from "../../api/auth/key";
 
 interface Venue {
   id: string;
@@ -13,35 +15,64 @@ interface Venue {
   rating: number;
 }
 
-interface VenueListProps {
-    searchQuery: string;
-  }
+interface Booking {
+  venueId: string;
+  dateFrom: string;
+  dateTo: string;
+}
 
-function VenueList({ searchQuery }: VenueListProps) {
+interface VenueListProps {
+  searchQuery: string;
+  selectedDates: [Date | null, Date | null];
+}
+
+function VenueList({ searchQuery, selectedDates }: VenueListProps) {
   const [venues, setVenues] = useState<Venue[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function fetchVenues() {
+    async function fetchData() {
       try {
-        const data = await getVenues();
-        setVenues(data);
+        const venueData = await getVenues();
+        setVenues(venueData);
+  
+        if (isLoggedIn()) {
+          const bookingData = await getAllBookings();
+          setBookings(bookingData);
+        }
       } catch {
-        setError("Could not load venues. Please try again later.");
+        setError("Could not load data.");
       } finally {
         setLoading(false);
       }
     }
-
-    fetchVenues();
+  
+    fetchData();
   }, []);
+  
 
-  const filteredVenues = venues.filter((venue) =>
-    venue.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    venue.location?.country?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  const [from, to] = selectedDates;
+  const filteredVenues = venues.filter((venue) => {
+    const matchesSearch =
+      venue.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      venue.location?.country?.toLowerCase().includes(searchQuery.toLowerCase());
+  
+    if (!from || !to) return matchesSearch;
+  
+    if (bookings.length === 0) return matchesSearch;
+  
+    const venueBookings = bookings.filter((b) => b.venueId === venue.id);
+  
+    const isBookedInRange = venueBookings.some((b) => {
+      const bFrom = new Date(b.dateFrom);
+      const bTo = new Date(b.dateTo);
+      return from <= bTo && to >= bFrom;
+    });
+  
+    return matchesSearch && !isBookedInRange;
+  });
 
   if (loading) return <p>Loading venues...</p>;
   if (error) return <p className="">{error}</p>;

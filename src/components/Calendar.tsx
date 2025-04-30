@@ -3,23 +3,26 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface CalendarProps {
-  onDateChange: (date: Date) => void;
+  onDateChange: (dates: [Date | null, Date | null]) => void;
 }
 
 const Calendar: React.FC<CalendarProps> = ({ onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDates, setSelectedDates] = useState<[Date | null, Date | null]>([null, null]);
 
-  const handleChange = (date: Date | null) => {
-    setSelectedDate(date);
-    if (date) onDateChange(date);
+  const handleChange = (dates: [Date | null, Date | null]) => {
+    setSelectedDates(dates);
+    onDateChange(dates);
   };
 
   return (
     <div className="calendar-container">
       <DatePicker
-        selected={selectedDate}
-        onChange={handleChange}
-        minDate={new Date()}
+      selected={selectedDates[0]}
+      onChange={handleChange}
+      startDate={selectedDates[0]}
+      endDate={selectedDates[1]}
+      selectsRange
+      minDate={new Date()}
         inline
       />
     </div>

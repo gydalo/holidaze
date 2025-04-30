@@ -20,7 +20,7 @@ export function save<T>(key: string, value: T): void {
     return {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
-      'X-Noroff-API-Key': '72735a77-9e47-4c8a-889b-3ae8bdfd8904',
+      'X-Noroff-API-Key': 'f72e33db-603a-4d29-8c08-f467554c9eda',
     };
   }
   
