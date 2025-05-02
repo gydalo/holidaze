@@ -27,12 +27,19 @@ type Venue = {
       lat: number;
       lng: number;
     };
+    owner: {
+      name: string;
+      email: string;
+      avatar?: {
+        url: string;
+        alt?: string;
+      };
+      banner?: {
+        url: string;
+        alt?: string;
+      };
+    };
   };
-
-  type Owner = {
-    name: string;
-    email: string;
-  }
 
   
   function VenueDetails() {
@@ -80,6 +87,7 @@ type Venue = {
         <div className="">
         <h1 className="">{venue.name}</h1>
         <p className="">{venue.description}</p>
+        <p>Venue owner: {venue.owner.name}</p>
         <p>{venue.meta.wifi}</p>
         <p>{venue.meta.breakfast}</p>
         <p>{venue.meta.pets}</p>
