@@ -4,6 +4,7 @@ import { API_PROFILE } from "../api/auth/constants";
 import ReusableButton from "../components/ReusableButton";
 import Modal from "../components/common/PopUp";
 import CreateVenue from "../components/forms/CreateVenue";
+import OwnedVenues from "../components/venues/OwnedVenues";
 
 type Profile = {
     name: string;
@@ -136,6 +137,7 @@ type Profile = {
         </Modal>
   
         {message && <p>{message}</p>}
+        <OwnedVenues />
       </div>
     );
   }

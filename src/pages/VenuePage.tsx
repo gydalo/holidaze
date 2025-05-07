@@ -46,6 +46,11 @@ function VenueDetails() {
   const [venue, setVenue] = useState<Venue | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const storedProfile = localStorage.getItem("profile");
+  const currentUser = storedProfile ? JSON.parse(storedProfile)?.data : null;
+  const isOwner = venue && currentUser?.name === venue.owner.name;
+
   const handleDateChange = (date: Date) => {
     console.log("Selected date:", date.toISOString());
   };
@@ -112,8 +117,19 @@ function VenueDetails() {
             {venue.location.address}, {venue.location.zip},{" "}
             {venue.location.city}, {venue.location.country}
           </p>
+          {!isOwner && <ReusableButton>Book Venue</ReusableButton>}
+
+          {isOwner && (
+            <div className="">
+              <ReusableButton>Edit Venue</ReusableButton>
+            </div>
+          )}
+          {isOwner && (
+            <div className="">
+              <ReusableButton>Delete Venue</ReusableButton>
+            </div>
+          )}
         </div>
-        <ReusableButton>Book Venue</ReusableButton>
       </div>
     </div>
   );
