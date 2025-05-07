@@ -1,8 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getVenueById } from "../api/venues/getVenueById";
 import ReusableButton from "../components/ReusableButton";
 import Calendar from "../components/Calendar";
+import { deleteVenueById } from "../api/venues/deleteVenue";
+import ConfirmModal from "../components/forms/ConfirmModal";
+import EditVenueModal from "../components/forms/EditVenue";
 
 type Venue = {
   id: string;
@@ -46,10 +49,31 @@ function VenueDetails() {
   const [venue, setVenue] = useState<Venue | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   const storedProfile = localStorage.getItem("profile");
   const currentUser = storedProfile ? JSON.parse(storedProfile)?.data : null;
   const isOwner = venue && currentUser?.name === venue.owner.name;
+
+  const navigate = useNavigate();
+
+  const handleDeleteConfirmed = async () => {
+    try {
+      await deleteVenueById(id);
+      navigate(`/profile/${currentUser.name}`);
+    } catch (error) {
+      console.error("Failed to delete venue:", error);
+      setDeleteError("Something went wrong while deleting the venue.");
+    } finally {
+      setShowConfirmModal(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    setShowConfirmModal(true);
+  };
 
   const handleDateChange = (date: Date) => {
     console.log("Selected date:", date.toISOString());
@@ -121,16 +145,35 @@ function VenueDetails() {
 
           {isOwner && (
             <div className="">
-              <ReusableButton>Edit Venue</ReusableButton>
+              <ReusableButton onClick={() => setEditModalOpen(true)}>
+                Edit Venue
+              </ReusableButton>
+
+              <EditVenueModal
+                venueId={venue.id}
+                isOpen={editModalOpen}
+                onClose={() => setEditModalOpen(false)}
+                onSuccess={() => {}}
+              />
             </div>
           )}
           {isOwner && (
             <div className="">
-              <ReusableButton>Delete Venue</ReusableButton>
+              <ReusableButton onClick={handleDeleteClick}>
+                Delete Venue
+              </ReusableButton>
+              {deleteError && <p className="">{deleteError}</p>}
             </div>
           )}
         </div>
       </div>
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        title="Delete Venue"
+        message="Are you sure you want to delete this venue? This action cannot be undone."
+        onConfirm={handleDeleteConfirmed}
+        onCancel={() => setShowConfirmModal(false)}
+      />
     </div>
   );
 }

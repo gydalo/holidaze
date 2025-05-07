@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
-import { authFetch } from "../../api/auth/key";
-import { API_VENUES_URL } from "../../api/auth/constants";
+import { createVenue } from "../../api/venues/createVenue";
 
 type FormData = {
   name: string;
@@ -49,19 +48,11 @@ function CreateVenue({ onSuccess }: Props) {
       },
     };
 
-    const response = await authFetch(API_VENUES_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newVenue),
-    });
-
-    if (response.ok) {
-      alert("Venue created!");
+    try {
+      await createVenue(newVenue);
       reset();
       onSuccess();
-    } else {
+    } catch (error) {
       alert("Failed to create venue");
     }
   };
