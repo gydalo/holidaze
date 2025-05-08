@@ -2,10 +2,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getVenueById } from "../api/venues/getVenueById";
 import ReusableButton from "../components/ReusableButton";
-import Calendar from "../components/Calendar";
 import { deleteVenueById } from "../api/venues/deleteVenue";
 import ConfirmModal from "../components/forms/ConfirmModal";
 import EditVenueModal from "../components/forms/EditVenue";
+import VenueBooking from "../components/bookings/VenueBookings";
 
 type Venue = {
   id: string;
@@ -133,7 +133,7 @@ function VenueDetails() {
           <p>{venue.price} NOK/ night</p>
         </div>
         <div>
-          <Calendar onDateChange={handleDateChange} />
+          {!isOwner && <VenueBooking venueId={venue.id} price={venue.price} />}
         </div>
         <div className="">
           <h1>Address</h1>

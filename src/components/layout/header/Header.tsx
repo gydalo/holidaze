@@ -16,13 +16,14 @@ function Header() {
   useEffect(() => {
     const loggedInStatus = isLoggedIn();
     setLoggedIn(loggedInStatus);
-
+  
     if (loggedInStatus) {
-      const profile = load<{ data: { name: string } }>("profile");
-      const nameFromProfile = profile?.data?.name || null;
+      const profile = load<{ name: string }>("profile")?.data;
+      const nameFromProfile = profile?.name || null;
       setProfileName(nameFromProfile);
     }
   }, []);
+  
 
   const openModal = (mode: "login" | "register") => {
     setAuthMode(mode);

@@ -34,7 +34,7 @@ export async function login(profile: LoginData): Promise<void> {
 
   try {
     const profile = await getProfile(name);
-    storage.save('profile', profile);
+    storage.save('profile', { data: profile });
     console.log('Fetched and saved profile data:', profile);
   } catch (error) {
     console.error('Failed to fetch full profile:', error);

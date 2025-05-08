@@ -18,7 +18,7 @@ interface ProfileData {
 }
 
 export async function getProfile(name: string): Promise<ProfileData> {
-  const url = `${API_PROFILE}/${name}?_venues=true`;
+  const url = `${API_PROFILE}/${name}?_bookings=true&_bookings_venue=true&_venues=true`;
 
   const response = await authFetch(url);
 

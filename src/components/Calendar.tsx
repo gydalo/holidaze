@@ -4,9 +4,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 interface CalendarProps {
   onDateChange: (dates: [Date | null, Date | null]) => void;
+  disabledRanges?: [Date, Date][];
 }
 
-const Calendar: React.FC<CalendarProps> = ({ onDateChange }) => {
+const Calendar: React.FC<CalendarProps> = ({ onDateChange, disabledRanges = [] }) => {
   const [selectedDates, setSelectedDates] = useState<[Date | null, Date | null]>([null, null]);
 
   const handleChange = (dates: [Date | null, Date | null]) => {
@@ -14,16 +15,21 @@ const Calendar: React.FC<CalendarProps> = ({ onDateChange }) => {
     onDateChange(dates);
   };
 
+  const isDateDisabled = (date: Date) => {
+    return disabledRanges.some(([start, end]) => date >= start && date <= end);
+  };
+
   return (
     <div className="calendar-container">
       <DatePicker
-      selected={selectedDates[0]}
-      onChange={handleChange}
-      startDate={selectedDates[0]}
-      endDate={selectedDates[1]}
-      selectsRange
-      minDate={new Date()}
+        selected={selectedDates[0]}
+        onChange={handleChange}
+        startDate={selectedDates[0]}
+        endDate={selectedDates[1]}
+        selectsRange
+        minDate={new Date()}
         inline
+        filterDate={(date) => !isDateDisabled(date)}
       />
     </div>
   );
