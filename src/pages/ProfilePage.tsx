@@ -5,6 +5,7 @@ import ReusableButton from "../components/ReusableButton";
 import Modal from "../components/common/PopUp";
 import CreateVenue from "../components/forms/CreateVenue";
 import OwnedVenues from "../components/venues/OwnedVenues";
+import BookingsList from "../components/bookings/BookingList";
 
 type Profile = {
     name: string;
@@ -138,6 +139,7 @@ type Profile = {
   
         {message && <p>{message}</p>}
         <OwnedVenues />
+        <BookingsList/>
       </div>
     );
   }

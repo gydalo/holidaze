@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllBookings } from "../../api/bookings/getAllBookings";
+import { load } from "../../api/auth/key";
 
 type Booking = {
   id: string;
@@ -15,27 +16,38 @@ type Booking = {
   };
 };
 
+const formatDate = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = String(date.getFullYear()).slice(-2);
+  return `${day}.${month}.${year}`;
+};
+
 const BookingsList = () => {
   const [upcoming, setUpcoming] = useState<Booking[]>([]);
   const [past, setPast] = useState<Booking[]>([]);
 
   useEffect(() => {
-    async function fetchBookings() {
-      try {
-        const data = await getAllBookings();
-        const now = new Date();
+    const profile = load<{ data: { name: string; bookings: Booking[] } }>(
+      "profile"
+    );
 
-        const upcomingBookings = data.filter((b) => new Date(b.dateTo) >= now);
-        const pastBookings = data.filter((b) => new Date(b.dateTo) < now);
-
-        setUpcoming(upcomingBookings);
-        setPast(pastBookings);
-      } catch (err) {
-        console.error("Could not load bookings:", err);
-      }
+    if (!profile?.data) {
+      console.warn("No profile found");
+      return;
     }
 
-    fetchBookings();
+    const allBookings = profile.data.bookings || [];
+    const now = new Date();
+
+    const upcomingBookings = allBookings.filter(
+      (b) => new Date(b.dateTo) >= now
+    );
+    const pastBookings = allBookings.filter((b) => new Date(b.dateTo) < now);
+
+    setUpcoming(upcomingBookings);
+    setPast(pastBookings);
   }, []);
 
   return (
@@ -44,10 +56,14 @@ const BookingsList = () => {
       {upcoming.length === 0 && <p>No upcoming bookings.</p>}
       {upcoming.map((booking) => (
         <div key={booking.id}>
-          <p>Venue: {booking.venue?.name}</p>
-          <p>From: {booking.dateFrom}</p>
-          <p>To: {booking.dateTo}</p>
-          <p>Guest: {booking.customer?.name} ({booking.customer?.email})</p>
+          <h3>{booking.venue?.name}</h3>
+          <p>
+            {" "}
+            {formatDate(booking.dateFrom)} - {formatDate(booking.dateTo)}
+          </p>
+          <p>
+            Guest: {booking.guests}
+          </p>
         </div>
       ))}
 
@@ -55,10 +71,13 @@ const BookingsList = () => {
       {past.length === 0 && <p>No past bookings.</p>}
       {past.map((booking) => (
         <div key={booking.id}>
-          <p>Venue: {booking.venue?.name}</p>
-          <p>From: {booking.dateFrom}</p>
-          <p>To: {booking.dateTo}</p>
-          <p>Guest: {booking.customer?.name} ({booking.customer?.email})</p>
+          <h3>{booking.venue?.name}</h3>
+          <p>
+            {formatDate(booking.dateFrom)} - {formatDate(booking.dateTo)}
+          </p>
+          <p>
+            Guest: {booking.guests}
+          </p>
         </div>
       ))}
     </div>
