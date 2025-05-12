@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { getVenues } from "../../api/venues/getVenues";
 import { Link } from "react-router-dom";
 import ReusableButton from "../ReusableButton";
-import { getAllBookings } from "../../api/bookings/getAllBookings";
-import { isLoggedIn } from "../../api/auth/key";
 
 interface Venue {
   id: string;
@@ -13,12 +11,10 @@ interface Venue {
   media: { url: string; alt: string }[];
   price: number;
   rating: number;
-}
-
-interface Booking {
-  venueId: string;
-  dateFrom: string;
-  dateTo: string;
+  bookings?: {
+    dateFrom: string;
+    dateTo: string;
+  }[];
 }
 
 interface VenueListProps {
@@ -28,7 +24,6 @@ interface VenueListProps {
 
 function VenueList({ searchQuery, selectedDates }: VenueListProps) {
   const [venues, setVenues] = useState<Venue[]>([]);
-  const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -37,56 +32,59 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
       try {
         const venueData = await getVenues();
         setVenues(venueData);
-  
-        if (isLoggedIn()) {
-          const bookingData = await getAllBookings();
-          setBookings(bookingData);
-        }
       } catch {
         setError("Could not load data.");
       } finally {
         setLoading(false);
       }
     }
-  
+
     fetchData();
   }, []);
-  
 
-  const [from, to] = selectedDates;
+  const normalizeDate = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+      .toISOString()
+      .split("T")[0];
+  };
+
+  const [normalizedFrom, normalizedTo] = selectedDates.map((date) =>
+    date ? normalizeDate(date) : null
+  );
+
   const filteredVenues = venues.filter((venue) => {
     const matchesSearch =
       venue.location?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      venue.location?.country?.toLowerCase().includes(searchQuery.toLowerCase());
-  
-    if (!from || !to) return matchesSearch;
-  
-    if (bookings.length === 0) return matchesSearch;
-  
-    const venueBookings = bookings.filter((b) => b.venueId === venue.id);
-  
+      venue.location?.country
+        ?.toLowerCase()
+        .includes(searchQuery.toLowerCase());
+
+    if (!normalizedFrom || !normalizedTo) return matchesSearch;
+
+    const venueBookings = venue.bookings || [];
+
     const isBookedInRange = venueBookings.some((b) => {
-      const bFrom = new Date(b.dateFrom);
-      const bTo = new Date(b.dateTo);
-      return from <= bTo && to >= bFrom;
+      const bFromString = normalizeDate(new Date(b.dateFrom));
+      const bToString = normalizeDate(new Date(b.dateTo));
+
+      return !(normalizedTo < bFromString || normalizedFrom > bToString);
     });
-  
+
     return matchesSearch && !isBookedInRange;
   });
 
   if (loading) return <p>Loading venues...</p>;
-  if (error) return <p className="">{error}</p>;
+  if (error) return <p>{error}</p>;
 
   return (
-    <div className="">
+    <div>
       {filteredVenues.map((venue) => (
-        <div key={venue.id} className="">
+        <div key={venue.id}>
           <img
             src={venue.media[0]?.url || "/public/assets/images/placeholder.jpg"}
             alt={venue.media[0]?.alt || "Venue image"}
-            className=""
           />
-          <h3 className="">{venue.name}</h3>
+          <h3>{venue.name}</h3>
           <p>Rating: {venue.rating}</p>
           <p>
             {venue.location.city}, {venue.location.country}
