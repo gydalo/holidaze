@@ -1,18 +1,15 @@
-import { API_BOOKINGS_URL } from "../auth/constants";
+import { API_VENUES_URL } from "../auth/constants";
 import { authFetch } from "../auth/key";
 
 export async function getVenueBookings(venueId: string) {
-  const response = await authFetch(`${API_BOOKINGS_URL}?_venue=true`);
+  const response = await authFetch(`${API_VENUES_URL}/${venueId}?_bookings=true`);
+  const data = await response.json();
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch bookings");
-  }
+  const bookings = data.data.bookings;
 
-  const { data } = await response.json();
-
-  if (!Array.isArray(data)) {
+  if (!Array.isArray(bookings)) {
     throw new Error("Expected bookings data to be an array");
   }
 
-  return data.filter((booking) => booking.venue?.id === venueId);
+  return bookings;
 }
