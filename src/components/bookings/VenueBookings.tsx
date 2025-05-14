@@ -14,7 +14,7 @@ interface VenueBookingProps {
   onBookingSuccess?: (from: string, to: string) => void;
 }
 
-const VenueBooking = ({ venueId, price, maxGuests }: VenueBookingProps) => {
+const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBookingProps) => {
   const [selectedDates, setSelectedDates] = useState<
     [Date | null, Date | null]
   >([null, null]);
@@ -82,10 +82,8 @@ const VenueBooking = ({ venueId, price, maxGuests }: VenueBookingProps) => {
         venueId,
       });
       if (onBookingSuccess) {
-        onBookingSuccess(from, to);
+        onBookingSuccess(from.toISOString(), to.toISOString());
       }
-      alert("Booking successful!");
-      navigate(`/profile/${currentUser?.name}`);
     } catch (err) {
       console.error(err);
       setError("Could not complete booking.");
