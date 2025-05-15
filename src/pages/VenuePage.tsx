@@ -122,7 +122,6 @@ function VenueDetails() {
         <p>Parking: {venue.meta.parking ? "Yes" : "No"}</p>
       </div>
 
-
       <div className="">
         <h2>Booking</h2>
         <p>{venue.price} NOK / night</p>
@@ -194,7 +193,5 @@ function VenueDetails() {
     </div>
   );
 }
-
-
 
 export default VenueDetails;
