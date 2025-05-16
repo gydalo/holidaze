@@ -37,7 +37,7 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
           bannerAlt: profile.banner?.alt || "",
           bio: profile.bio || "",
         });
-      } catch (err) {
+      } catch {
         setError("Failed to load profile");
       }
     }
@@ -75,7 +75,7 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
       } else {
         setError("Failed to update profile");
       }
-    } catch (err) {
+    } catch {
       setError("Error updating profile");
     }
   };
@@ -84,7 +84,6 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2>Edit Profile</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
         <div>
           <label>Avatar URL</label>
           <input {...register("avatarUrl")} placeholder="Avatar URL" />
@@ -102,9 +101,7 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
 
         {error && <p className="">{error}</p>}
 
-        <button type="submit" className="">
-          Save Changes
-        </button>
+        <button type="submit">Save Changes</button>
       </form>
     </Modal>
   );

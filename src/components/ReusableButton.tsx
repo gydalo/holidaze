@@ -1,14 +1,20 @@
-import React from 'react';
+import React from "react";
 
-interface ButtonProps {
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+type ReusableButtonProps = {
   children: React.ReactNode;
-}
+  onClick: () => void;
+  disabled?: boolean;
+  className?: string;
+};
 
-const ReusableButton: React.FC<ButtonProps> = ({ onClick, type = 'button', children }) => {
+const ReusableButton: React.FC<ReusableButtonProps> = ({
+  children,
+  onClick,
+  disabled = false,
+  className = "",
+}) => {
   return (
-    <button type={type} onClick={onClick}>
+    <button onClick={onClick} disabled={disabled} className={className}>
       {children}
     </button>
   );

@@ -2,27 +2,23 @@ import { useState } from "react";
 import { login as loginUser } from "./login";
 import { register as registerUser } from "./register";
 
-interface AuthData {
+interface RegisterData {
+  name: string;
   email: string;
   password: string;
-  name?: string;
-  bio?: string;
-  avatar?: {
-    url: string;
-    alt?: string;
-  };
-  banner?: {
-    url: string;
-    alt?: string;
-  };
   venueManager?: boolean;
+}
+
+interface LoginData {
+  email: string;
+  password: string;
 }
 
 export function useAuth() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function login(data: AuthData): Promise<void> {
+  async function login(data: LoginData): Promise<void> {
     setLoading(true);
     setError(null);
     try {
@@ -38,7 +34,7 @@ export function useAuth() {
     }
   }
 
-  async function register(data: AuthData): Promise<void> {
+  async function register(data: RegisterData): Promise<void> {
     setLoading(true);
     setError(null);
     try {

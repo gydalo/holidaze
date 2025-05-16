@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { createVenue } from "../../api/venues/createVenue";
 
 type FormData = {
@@ -25,8 +26,10 @@ type Props = {
 
 function CreateVenue({ onSuccess }: Props) {
   const { register, handleSubmit, reset } = useForm<FormData>();
+  const [error, setError] = useState<string>("");
 
   const onSubmit = async (data: FormData) => {
+    setError("");
     const newVenue = {
       name: data.name,
       description: data.description,
@@ -52,13 +55,13 @@ function CreateVenue({ onSuccess }: Props) {
       await createVenue(newVenue);
       reset();
       onSuccess();
-    } catch (error) {
-      alert("Failed to create venue");
+    } catch {
+      setError("Failed to create venue. Please try again.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("name")} placeholder="Venue name" required />
       <textarea
         {...register("description")}
@@ -79,6 +82,7 @@ function CreateVenue({ onSuccess }: Props) {
         placeholder="Max guests"
         required
       />
+
       <label>
         <input type="checkbox" {...register("wifi")} /> Wifi
       </label>
@@ -91,14 +95,16 @@ function CreateVenue({ onSuccess }: Props) {
       <label>
         <input type="checkbox" {...register("pets")} /> Pets allowed
       </label>
+
       <input {...register("address")} placeholder="Address" required />
       <input {...register("city")} placeholder="City" required />
       <input {...register("zip")} placeholder="ZIP code" required />
       <input {...register("country")} placeholder="Country" required />
       <input {...register("continent")} placeholder="Continent" required />
-      <button type="submit" className="">
-        Create Venue
-      </button>
+
+      {error && <p className="">{error}</p>}
+
+      <button type="submit">Create Venue</button>
     </form>
   );
 }

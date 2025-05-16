@@ -52,7 +52,7 @@ const BookingsList = () => {
         const customerJson = await customerResponse.json();
         const customerBookings: Booking[] = customerJson.data;
 
-        let managerVenueBookings: Booking[] = [];
+        const managerVenueBookings: Booking[] = [];
 
         if (venueManager) {
           const profileResponse = await authFetch(

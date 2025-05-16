@@ -69,7 +69,7 @@ function ProfilePage() {
       } else {
         setMessage("Failed to update profile.");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error while saving changes.");
     } finally {
       setSaving(false);
@@ -78,13 +78,14 @@ function ProfilePage() {
 
   async function refreshProfile() {
     if (!profile) return;
+
     try {
       const response = await authFetch(`${API_PROFILE}/${profile.name}`);
       const result = await response.json();
       save("profile", { data: result.data });
       setProfile(result.data);
-    } catch (error) {
-      console.error("Failed to refresh profile");
+    } catch {
+      setMessage("Failed to refresh profile.");
     }
   }
 

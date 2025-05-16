@@ -54,7 +54,7 @@ function EditVenueModal({ venueId, isOpen, onClose, onSuccess }: Props) {
           country: data.location?.country || "",
           continent: data.location?.continent || "",
         });
-      } catch (err) {
+      } catch {
         setError("Failed to fetch venue");
       }
     }
@@ -89,7 +89,7 @@ function EditVenueModal({ venueId, isOpen, onClose, onSuccess }: Props) {
 
       onSuccess();
       onClose();
-    } catch (err) {
+    } catch {
       setError("Failed to update venue");
     }
   };
@@ -99,11 +99,25 @@ function EditVenueModal({ venueId, isOpen, onClose, onSuccess }: Props) {
       <h2>Edit Venue</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="">
         <input {...register("name")} placeholder="Venue name" required />
-        <textarea {...register("description")} placeholder="Description" required />
+        <textarea
+          {...register("description")}
+          placeholder="Description"
+          required
+        />
         <input {...register("mediaUrl")} placeholder="Image URL" />
         <input {...register("mediaAlt")} placeholder="Image Alt Text" />
-        <input type="number" {...register("price")} placeholder="Price" required />
-        <input type="number" {...register("maxGuests")} placeholder="Max guests" required />
+        <input
+          type="number"
+          {...register("price")}
+          placeholder="Price"
+          required
+        />
+        <input
+          type="number"
+          {...register("maxGuests")}
+          placeholder="Max guests"
+          required
+        />
 
         <label>
           <input type="checkbox" {...register("wifi")} /> Wifi
@@ -124,8 +138,11 @@ function EditVenueModal({ venueId, isOpen, onClose, onSuccess }: Props) {
         <input {...register("country")} placeholder="Country" required />
         <input {...register("continent")} placeholder="Continent" required />
 
-        {error && <p className="">{error}</p>}
-        <button type="submit" className="">Save Changes</button>
+        {error && <p className="text-red-500">{error}</p>}
+
+        <button type="submit" className="">
+          Save Changes
+        </button>
       </form>
     </Modal>
   );

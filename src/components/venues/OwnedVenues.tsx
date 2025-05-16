@@ -29,7 +29,7 @@ function OwnedVenues() {
 
         const profile = await getProfile(currentUser.name);
         setOwnedVenues(profile.venues || []);
-      } catch (err) {
+      } catch {
         setError("Could not fetch owned venues");
       } finally {
         setLoading(false);
@@ -40,24 +40,23 @@ function OwnedVenues() {
   }, []);
 
   if (loading) return <p>Loading venues...</p>;
-  if (error) return <p>{error}</p>;
+  if (error.trim()) return <p>{error}</p>;
   if (ownedVenues.length === 0) return <p>You don't own any venues yet.</p>;
 
   return (
     <div>
-      <h2 className="">My Venues</h2>
-      <div className="">
+      <h2>My Venues</h2>
+      <div>
         {ownedVenues.map((venue) => (
-          <Link key={venue.id} to={`/venue/${venue.id}`} className="">
-            <div className="">
-              <h3 className="">{venue.name}</h3>
+          <Link key={venue.id} to={`/venue/${venue.id}`}>
+            <div>
+              <h3>{venue.name}</h3>
             </div>
             <img
               src={
                 venue.media?.[0]?.url || "/public/assets/images/placeholder.jpg"
               }
               alt={venue.media?.[0]?.alt || venue.name}
-              className=""
             />
           </Link>
         ))}

@@ -40,7 +40,7 @@ type Venue = {
 };
 
 function VenueDetails() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [venue, setVenue] = useState<Venue | null>(null);
@@ -61,11 +61,13 @@ function VenueDetails() {
 
   useEffect(() => {
     async function fetchVenue() {
+      if (!id) return;
+
       try {
         const data = await getVenueById(id);
         setVenue(data);
-      } catch (error) {
-        setError("Could not fetch venue");
+      } catch {
+        setError("Could not fetch venue.");
       } finally {
         setLoading(false);
       }
@@ -75,11 +77,12 @@ function VenueDetails() {
   }, [id]);
 
   const handleDeleteConfirmed = async () => {
+    if (!id) return;
+
     try {
       await deleteVenueById(id);
       navigate(`/profile/${currentUser.name}`);
-    } catch (error) {
-      console.error("Failed to delete venue:", error);
+    } catch {
       setDeleteError("Something went wrong while deleting the venue.");
     } finally {
       setShowConfirmModal(false);

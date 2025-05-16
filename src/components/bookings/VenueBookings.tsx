@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { eachDayOfInterval } from "date-fns";
-import { useNavigate } from "react-router-dom";
 
 import ReusableButton from "../ReusableButton";
 import Calendar from "../Calendar";
@@ -15,20 +13,10 @@ interface VenueBookingProps {
 }
 
 const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBookingProps) => {
-  const [selectedDates, setSelectedDates] = useState<
-    [Date | null, Date | null]
-  >([null, null]);
-  const [bookedRanges, setBookedRanges] = useState<
-    { start: Date; end: Date }[]
-  >([]);
-  const [excludedDates, setExcludedDates] = useState<Date[]>([]);
+  const [selectedDates, setSelectedDates] = useState<[Date | null, Date | null]>([null, null]);
+  const [bookedRanges, setBookedRanges] = useState<{ start: Date; end: Date }[]>([]);
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
-
-  const storedProfile = localStorage.getItem("profile");
-  const currentUser = storedProfile ? JSON.parse(storedProfile)?.data : null;
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -38,14 +26,7 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
           start: new Date(b.dateFrom),
           end: new Date(b.dateTo),
         }));
-
         setBookedRanges(ranges);
-
-        const dates = ranges.flatMap((range) =>
-          eachDayOfInterval({ start: range.start, end: range.end })
-        );
-
-        setExcludedDates(dates);
       } catch (err) {
         console.error("Failed to load bookings:", err);
       }
@@ -66,9 +47,7 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
       return setError(`Guests must be between 1 and ${maxGuests}.`);
     }
 
-    const hasOverlap = bookedRanges.some(
-      ({ start, end }) => from <= end && to >= start
-    );
+    const hasOverlap = bookedRanges.some(({ start, end }) => from <= end && to >= start);
 
     if (hasOverlap) {
       return setError("Selected dates are already booked.");
@@ -81,21 +60,22 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
         guests,
         venueId,
       });
+
       if (onBookingSuccess) {
         onBookingSuccess(from.toISOString(), to.toISOString());
       }
     } catch (err) {
-      console.error(err);
+      console.error("Booking failed:", err);
       setError("Could not complete booking.");
     }
   };
 
   return (
-    <div className="venue-booking">
-      <h2 className="venue-booking__title">Book this venue</h2>
-      <p className="venue-booking__price">{price} NOK / night</p>
+    <div className="">
+      <h2 className="">Book this venue</h2>
+      <p className="">{price} NOK / night</p>
 
-      <label className="venue-booking__label">
+      <label className="">
         Guests (max {maxGuests}):
         <input
           type="number"
@@ -103,7 +83,7 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
           min={1}
           max={maxGuests}
           onChange={(e) => setGuests(parseInt(e.target.value))}
-          className="venue-booking__input"
+          className=""
         />
       </label>
 
@@ -114,7 +94,7 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
 
       <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
 
-      {error && <p className="venue-booking__error">{error}</p>}
+      {error && <p className="">{error}</p>}
     </div>
   );
 };

@@ -1,7 +1,28 @@
 import { API_VENUES_URL } from "../auth/constants";
 import { authFetch } from "../auth/key";
 
-export async function createVenue(data: any) {
+export type CreateVenueData = {
+  name: string;
+  description: string;
+  media: { url: string; alt?: string }[];
+  price: number;
+  maxGuests: number;
+  meta?: {
+    wifi?: boolean;
+    parking?: boolean;
+    breakfast?: boolean;
+    pets?: boolean;
+  };
+  location?: {
+    address?: string;
+    city?: string;
+    zip?: string;
+    country?: string;
+    continent?: string;
+  };
+};
+
+export async function createVenue(data: CreateVenueData) {
   const response = await authFetch(API_VENUES_URL, {
     method: "POST",
     headers: {
