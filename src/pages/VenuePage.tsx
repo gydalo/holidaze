@@ -50,10 +50,13 @@ function VenueDetails() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [bookingDates, setBookingDates] = useState<{
-    from: string;
-    to: string;
-  } | null>(null);
+  const [bookingDates, setBookingDates] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+  const [confirmedBookingDates, setConfirmedBookingDates] = useState<
+    [Date | null, Date | null]
+  >([null, null]);
 
   const storedProfile = localStorage.getItem("profile");
   const currentUser = storedProfile ? JSON.parse(storedProfile)?.data : null;
@@ -90,7 +93,7 @@ function VenueDetails() {
   };
 
   const handleBookingSuccess = (from: string, to: string) => {
-    setBookingDates({ from, to });
+    setConfirmedBookingDates([new Date(from), new Date(to)]);
     setShowConfirmation(true);
   };
 
@@ -99,76 +102,81 @@ function VenueDetails() {
   if (!venue) return <p>Venue not found</p>;
 
   return (
-    <div className="">
-      <div className="">
-        {venue.media?.[0]?.url && (
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Images */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        {venue.media?.map((img, idx) => (
           <img
-            src={venue.media[0].url}
-            alt={venue.media[0].alt || venue.name}
-            className=""
+            key={idx}
+            src={img.url}
+            alt={img.alt || venue.name}
+            className="w-full h-64 object-cover rounded"
           />
-        )}
-        <p>
-          {venue.location.city}, {venue.location.country},{" "}
-          {venue.location.continent}
-        </p>
-        <p>Rating: {venue.rating}</p>
+        ))}
       </div>
+      <p className="text-lg font-medium mb-4">
+        {venue.location.city}, {venue.location.country}
+      </p>
 
-      <div className="">
-        <h1>{venue.name}</h1>
-        <p>{venue.description}</p>
-        <p>Venue owner: {venue.owner.name}</p>
-        <p>Wifi: {venue.meta.wifi ? "Yes" : "No"}</p>
-        <p>Breakfast: {venue.meta.breakfast ? "Yes" : "No"}</p>
-        <p>Pets allowed: {venue.meta.pets ? "Yes" : "No"}</p>
-        <p>Parking: {venue.meta.parking ? "Yes" : "No"}</p>
-      </div>
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Left Side */}
+        <div className="space-y-4">
+          <h1 className="text-2xl font-bold">{venue.name}</h1>
+          <p>{venue.description}</p>
+          <div>
+            <h2 className="font-semibold">Amenities</h2>
+            <ul className="list-disc ml-6">
+              <li>Wifi: {venue.meta.wifi ? "Yes" : "No"}</li>
+              <li>Breakfast: {venue.meta.breakfast ? "Yes" : "No"}</li>
+              <li>Pets allowed: {venue.meta.pets ? "Yes" : "No"}</li>
+              <li>Parking: {venue.meta.parking ? "Yes" : "No"}</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="font-semibold">Address</h2>
+            <p>
+              {venue.location.address}, {venue.location.zip},{" "}
+              {venue.location.city}, {venue.location.country}
+            </p>
+          </div>
+          <div>
+            <h2 className="font-semibold">Owner</h2>
+            <p>
+              {venue.owner.name} ({venue.owner.email})
+            </p>
+          </div>
 
-      <div className="">
-        <h2>Booking</h2>
-        <p>{venue.price} NOK / night</p>
-        {!isOwner && (
-          <VenueBooking
-            venueId={venue.id}
-            price={venue.price}
-            maxGuests={venue.maxGuests}
-            onBookingSuccess={handleBookingSuccess}
-          />
-        )}
-      </div>
+          {isOwner && (
+            <div className="space-x-4">
+              <ReusableButton onClick={() => setEditModalOpen(true)}>
+                Edit Venue
+              </ReusableButton>
+              <ReusableButton onClick={() => setShowConfirmModal(true)}>
+                Delete Venue
+              </ReusableButton>
+              {deleteError && <p className="text-red-600">{deleteError}</p>}
+            </div>
+          )}
+        </div>
 
-      <div className="">
-        <h2>Address</h2>
-        <p>
-          {venue.location.address}, {venue.location.zip}, {venue.location.city},{" "}
-          {venue.location.country}
-        </p>
-      </div>
-
-      {isOwner && (
-        <>
-          <div className="">
-            <ReusableButton onClick={() => setEditModalOpen(true)}>
-              Edit Venue
-            </ReusableButton>
-            <EditVenueModal
+        {/* Right Side */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold">Booking</h2>
+          <p className="text-lg">{venue.price} NOK / night</p>
+          {!isOwner && (
+            <VenueBooking
               venueId={venue.id}
-              isOpen={editModalOpen}
-              onClose={() => setEditModalOpen(false)}
-              onSuccess={() => {}}
+              price={venue.price}
+              maxGuests={venue.maxGuests}
+              selectedDates={bookingDates}
+              onDateChange={setBookingDates}
+              onBookingSuccess={handleBookingSuccess}
             />
-          </div>
+          )}
+        </div>
+      </div>
 
-          <div className="">
-            <ReusableButton onClick={() => setShowConfirmModal(true)}>
-              Delete Venue
-            </ReusableButton>
-            {deleteError && <p className="">{deleteError}</p>}
-          </div>
-        </>
-      )}
-
+      {/* Modals */}
       <ConfirmModal
         isOpen={showConfirmModal}
         title="Delete Venue"
@@ -177,22 +185,33 @@ function VenueDetails() {
         onCancel={() => setShowConfirmModal(false)}
       />
 
-      {bookingDates && (
-        <BookingConfirmation
-          isOpen={showConfirmation}
-          onClose={() => setShowConfirmation(false)}
-          venue={{
-            name: venue.name,
-            media: venue.media,
-            address: venue.location.address,
-            city: venue.location.city,
-            zip: venue.location.zip,
-            country: venue.location.country,
-            owner: venue.owner,
-          }}
-          bookingDates={bookingDates}
-        />
-      )}
+      {confirmedBookingDates[0] &&
+        confirmedBookingDates[1] &&
+        showConfirmation && (
+          <BookingConfirmation
+            isOpen={showConfirmation}
+            onClose={() => setShowConfirmation(false)}
+            venue={{
+              name: venue.name,
+              media: venue.media,
+              address: venue.location.address,
+              city: venue.location.city,
+              zip: venue.location.zip,
+              country: venue.location.country,
+              owner: venue.owner,
+            }}
+            bookingDates={{
+              from: confirmedBookingDates[0].toISOString(),
+              to: confirmedBookingDates[1].toISOString(),
+            }}
+          />
+        )}
+      <EditVenueModal
+        venueId={venue.id}
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSuccess={() => {}}
+      />
     </div>
   );
 }

@@ -15,6 +15,7 @@ interface Venue {
     dateFrom: string;
     dateTo: string;
   }[];
+  created: string;
 }
 
 interface VenueListProps {
@@ -31,14 +32,17 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
     async function fetchData() {
       try {
         const venueData = await getVenues();
-        setVenues(venueData);
+        const sorted = venueData
+          .slice()
+          .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+        setVenues(sorted);
       } catch {
         setError("Could not load data.");
       } finally {
         setLoading(false);
       }
     }
-
+  
     fetchData();
   }, []);
 

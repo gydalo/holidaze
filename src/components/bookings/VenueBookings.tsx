@@ -10,11 +10,21 @@ interface VenueBookingProps {
   price: number;
   maxGuests: number;
   onBookingSuccess?: (from: string, to: string) => void;
+  selectedDates: [Date | null, Date | null];
+  onDateChange: (dates: [Date | null, Date | null]) => void;
 }
 
-const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBookingProps) => {
-  const [selectedDates, setSelectedDates] = useState<[Date | null, Date | null]>([null, null]);
-  const [bookedRanges, setBookedRanges] = useState<{ start: Date; end: Date }[]>([]);
+const VenueBooking = ({
+  venueId,
+  price,
+  maxGuests,
+  onBookingSuccess,
+  selectedDates,
+  onDateChange,
+}: VenueBookingProps) => {
+  const [bookedRanges, setBookedRanges] = useState<
+    { start: Date; end: Date }[]
+  >([]);
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
 
@@ -47,7 +57,9 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
       return setError(`Guests must be between 1 and ${maxGuests}.`);
     }
 
-    const hasOverlap = bookedRanges.some(({ start, end }) => from <= end && to >= start);
+    const hasOverlap = bookedRanges.some(
+      ({ start, end }) => from <= end && to >= start
+    );
 
     if (hasOverlap) {
       return setError("Selected dates are already booked.");
@@ -70,12 +82,23 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
     }
   };
 
-  return (
-    <div className="">
-      <h2 className="">Book this venue</h2>
-      <p className="">{price} NOK / night</p>
+  const cleaningFee = 600;
+  const securityFee = 600;
 
-      <label className="">
+  const nights =
+    selectedDates[0] && selectedDates[1]
+      ? Math.ceil(
+          (selectedDates[1].getTime() - selectedDates[0].getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
+      : 0;
+
+  const priceBeforeFees = price * nights;
+  const total = priceBeforeFees + cleaningFee + securityFee;
+
+  return (
+    <div className="space-y-4">
+      <label className="block font-medium">
         Guests (max {maxGuests}):
         <input
           type="number"
@@ -83,18 +106,35 @@ const VenueBooking = ({ venueId, price, maxGuests, onBookingSuccess }: VenueBook
           min={1}
           max={maxGuests}
           onChange={(e) => setGuests(parseInt(e.target.value))}
-          className=""
+          className="mt-1 w-full border rounded p-2"
         />
       </label>
 
       <Calendar
-        onDateChange={setSelectedDates}
+        onDateChange={onDateChange}
         disabledRanges={bookedRanges.map(({ start, end }) => [start, end])}
       />
 
+      {selectedDates[0] && selectedDates[1] && (
+        <div className="border-t pt-4 text-sm space-y-1">
+          <p>
+            {price} NOK × {nights} night{nights > 1 ? "s" : ""}:{" "}
+            <strong>{priceBeforeFees} NOK</strong>
+          </p>
+          <p>
+            Cleaning fee: <strong>{cleaningFee} NOK</strong>
+          </p>
+          <p>
+            Holidaze security fee: <strong>{securityFee} NOK</strong>
+          </p>
+          <hr className="my-2" />
+          <p className="font-bold text-base">Total: {total} NOK</p>
+        </div>
+      )}
+
       <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
 
-      {error && <p className="">{error}</p>}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 };
