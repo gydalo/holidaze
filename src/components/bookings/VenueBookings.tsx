@@ -112,7 +112,9 @@ const VenueBooking = ({
 
       <Calendar
         onDateChange={onDateChange}
+        value={selectedDates}
         disabledRanges={bookedRanges.map(({ start, end }) => [start, end])}
+        variant="venuepage"
       />
 
       {selectedDates[0] && selectedDates[1] && (
