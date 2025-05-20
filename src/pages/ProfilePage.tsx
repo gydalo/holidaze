@@ -158,7 +158,6 @@ function ProfilePage() {
         isOpen={isCreateVenueModalOpen}
         onClose={() => setIsCreateVenueModalOpen(false)}
       >
-        <h2>Create a Venue</h2>
         <CreateVenue onSuccess={() => setIsCreateVenueModalOpen(false)} />
       </Modal>
 

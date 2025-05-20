@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Modal from "../common/PopUp";
 import { authFetch } from "../../api/auth/key";
 import { API_PROFILE } from "../../api/auth/constants";
+import ReusableButton from "../ReusableButton";
 
 type Props = {
   isOpen: boolean;
@@ -82,26 +83,40 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <h2>Edit Profile</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <h2 className="text-center mb-6">Edit Profile</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto">
         <div>
-          <label>Avatar URL</label>
-          <input {...register("avatarUrl")} placeholder="Avatar URL" />
+          <label className="block font-medium mb-1">Avatar URL</label>
+          <input
+            {...register("avatarUrl")}
+            placeholder="Avatar URL"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+          />
         </div>
-
+  
         <div>
-          <label>Banner URL</label>
-          <input {...register("bannerUrl")} placeholder="Banner URL" />
+          <label className="block font-medium mb-1">Banner URL</label>
+          <input
+            {...register("bannerUrl")}
+            placeholder="Banner URL"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+          />
         </div>
-
+  
         <div>
-          <label>Bio</label>
-          <textarea {...register("bio")} placeholder="Tell us about yourself" />
+          <label className="block font-medium mb-1">Bio</label>
+          <textarea
+            {...register("bio")}
+            placeholder="Tell us about yourself"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+          />
         </div>
-
-        {error && <p className="">{error}</p>}
-
-        <button type="submit">Save Changes</button>
+  
+        {error && <p className="text-red-500 text-center">{error}</p>}
+  
+        <ReusableButton type="submit" className="w-full rounded-lg">
+          Save Changes
+        </ReusableButton>
       </form>
     </Modal>
   );

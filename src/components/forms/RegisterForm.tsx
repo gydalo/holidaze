@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuth } from "../../api/auth/useAuth";
 import { useState } from "react";
+import ReusableButton from "../ReusableButton";
 
 const schema = yup.object({
   name: yup
@@ -60,49 +61,74 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
-      <h2>Register</h2>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-md mx-auto space-y-6"
+    >
+      <h2 className="text-center">Register</h2>
 
       <div>
-        <label>Username</label>
-        <input type="text" {...register("name")} />
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-      </div>
-
-      <div>
-        <label>Email</label>
-        <input type="email" {...register("email")} />
-        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-      </div>
-
-      <div>
-        <label>Password</label>
-        <input type="password" {...register("password")} />
-        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-      </div>
-
-      <div>
-        <label>Confirm Password</label>
-        <input type="password" {...register("confirmPassword")} />
-        {errors.confirmPassword && (
-          <p className="text-red-500">{errors.confirmPassword.message}</p>
+        <label className="block font-medium mb-1 pl-2">Username</label>
+        <input
+          type="text"
+          {...register("name")}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        {errors.name && (
+          <p className="text-red-500 text-sm mt-1 pl-2">{errors.name.message}</p>
         )}
       </div>
 
       <div>
-        <label>
-          <input type="checkbox" {...register("venueManager")} />
+        <label className="block font-medium mb-1 pl-2">Email</label>
+        <input
+          type="email"
+          {...register("email")}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1 pl-2">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block font-medium mb-1 pl-2">Password</label>
+        <input
+          type="password"
+          {...register("password")}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm mt-1 pl-2">{errors.password.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block font-medium mb-1 pl-2">Confirm Password</label>
+        <input
+          type="password"
+          {...register("confirmPassword")}
+          className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm mt-1 pl-2">{errors.confirmPassword.message}</p>
+        )}
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <input type="checkbox" {...register("venueManager")} id="venueManager" />
+        <label htmlFor="venueManager" className="text-sm">
           Register as a Venue Manager
         </label>
       </div>
 
-      <button type="submit" disabled={loading}>
+      <ReusableButton type="submit" className="w-full rounded-lg" disabled={loading}>
         {loading ? "Registering..." : "Register"}
-      </button>
+      </ReusableButton>
 
-      {submitError && <p className="text-red-500">{submitError}</p>}
-      {authError && <p className="text-red-500">{authError}</p>}
-      {successMessage && <p className="">{successMessage}</p>}
+      {submitError && <p className="text-red-500 text-center">{submitError}</p>}
+      {authError && <p className="text-red-500 text-center">{authError}</p>}
+      {successMessage && <p className="text-center">{successMessage}</p>}
     </form>
   );
 };

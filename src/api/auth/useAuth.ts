@@ -26,13 +26,15 @@ export function useAuth() {
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
-      } else {
-        setError("Something went wrong.");
-      }
-    } finally {
-      setLoading(false);
+        throw err;
+    } else {
+      setError("Something went wrong.");
+      throw new Error("Something went wrong.");
     }
+  } finally {
+    setLoading(false);
   }
+}
 
   async function register(data: RegisterData): Promise<void> {
     setLoading(true);
@@ -42,6 +44,7 @@ export function useAuth() {
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
+        throw err;
       } else {
         setError("Something went wrong.");
       }

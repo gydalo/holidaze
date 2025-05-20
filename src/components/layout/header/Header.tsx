@@ -55,19 +55,19 @@ function Header() {
         {authMode === "login" ? (
           <>
             <LoginForm />
-            <p>
-              Don't have an account?{" "}
-              <button onClick={() => setAuthMode("register")}>
+            <p className="text-center pt-4">
+              Don't have an account?{" "} <br />
+              <a className="hover:underline hover:underline-offset-2 cursor-pointer" onClick={() => setAuthMode("register")}>
                 Register here
-              </button>
+              </a>
             </p>
           </>
         ) : (
           <>
             <RegisterForm />
-            <p>
-              Already have an account?{" "}
-              <button onClick={() => setAuthMode("login")}>Login here</button>
+            <p className="text-center pt-4">
+              Already have an account?{" "} <br />
+              <a className="hover:underline hover:underline-offset-2 cursor-pointer" onClick={() => setAuthMode("login")}>Login here</a>
             </p>
           </>
         )}
