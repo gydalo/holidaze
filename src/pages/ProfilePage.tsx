@@ -94,65 +94,90 @@ function ProfilePage() {
   }
 
   return (
-    <div>
-      <h1>Profile Page</h1>
-
-      <ReusableButton onClick={() => setIsEditProfileModalOpen(true)}>
-        Edit Profile
-      </ReusableButton>
-
+    <div className="max-w-6xl mx-auto">
       {profile.banner?.url && (
         <div>
           <img
             src={profile.banner.url}
             alt={profile.banner.alt || "Profile Banner"}
+            className="w-full h-52 object-cover"
           />
         </div>
       )}
 
       {profile.avatar?.url && (
         <div>
-          <img
-            src={profile.avatar.url}
-            alt={profile.avatar.alt || "Profile Avatar"}
-          />
+          <div className="flex mt-[-4rem] z-10 gap-10 md:gap-40 justify-center flex-wrap">
+            <img
+              src={profile.avatar.url}
+              alt={profile.avatar.alt || "Profile Avatar"}
+              className="w-52 h-52 rounded-full shadow-md"
+            />
+            <div className="sm:mt-[5rem] flex gap-6 flex-col">
+              <div>
+                <h2 className="text-2xl font-semibold">{profile.name}</h2>
+                <p className="text-gray-700 text-sm">{profile.email}</p>
+              </div>
+              <div className="flex gap-2">
+                <ReusableButton onClick={() => setIsEditProfileModalOpen(true)}>
+                  Edit Profile
+                </ReusableButton>
+                {isVenueManager && (
+                  <ReusableButton
+                    onClick={() => setIsCreateVenueModalOpen(true)}
+                  >
+                    Add Venue
+                  </ReusableButton>
+                )}
+              </div>
+              {profile.bio && (
+                <p className="text-gray-600 text-sm leading-relaxed max-w-prose">
+                  {profile.bio}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
-      <div>
-        <p>Name: {profile.name}</p>
-        <p>Email: {profile.email}</p>
-        {profile.bio && <p>Bio: {profile.bio}</p>}
-      </div>
+      <div className="flex flex-col md:flex-row md:items-start gap-8 px-4 md:px-8 mt-6">
+        <div className="flex flex-col items-center md:items-start w-full md:w-1/3">
+          {!isVenueManager && (
+            <div className="mt-6 w-full">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={pendingVenueManager}
+                  onChange={(e) => setPendingVenueManager(e.target.checked)}
+                />
+                <span>Become a venue manager account</span>
+              </label>
+              {pendingVenueManager && (
+                <div className="mt-2">
+                  <ReusableButton onClick={handleSave} disabled={saving}>
+                    {saving ? "Saving..." : "Save"}
+                  </ReusableButton>
+                </div>
+              )}
+            </div>
+          )}
 
-      {!isVenueManager && (
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={pendingVenueManager}
-              onChange={(e) => setPendingVenueManager(e.target.checked)}
-            />
-            <span> Become a Venue Manager</span>
-          </label>
-
-          {pendingVenueManager && (
-            <div className="">
-              <ReusableButton onClick={handleSave} disabled={saving}>
-                {saving ? "Saving..." : "Save Changes"}
-              </ReusableButton>
+          {isVenueManager && (
+            <div className="mt-8 w-full">
+              <h3 className="font-semibold text-lg mb-2">Venues</h3>
+              <OwnedVenues />
             </div>
           )}
         </div>
-      )}
 
-      {isVenueManager && (
         <div className="">
-          <ReusableButton onClick={() => setIsCreateVenueModalOpen(true)}>
-            Add Venue
-          </ReusableButton>
+          {message && <p className="text-green-600 text-sm mt-2">{message}</p>}
+
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
+            <BookingsList />
+          </div>
         </div>
-      )}
+      </div>
 
       <Modal
         isOpen={isCreateVenueModalOpen}
@@ -167,11 +192,6 @@ function ProfilePage() {
         profileName={profile.name}
         onSuccess={refreshProfile}
       />
-
-      {message && <p>{message}</p>}
-
-      <OwnedVenues />
-      <BookingsList />
     </div>
   );
 }
