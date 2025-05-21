@@ -45,14 +45,14 @@ function OwnedVenues() {
 
   return (
     <div>
-      <h2>My Venues</h2>
-      <div>
+      <div className="flex flex-col gap-4">
         {ownedVenues.map((venue) => (
           <Link key={venue.id} to={`/venue/${venue.id}`}>
             <div>
               <h3>{venue.name}</h3>
             </div>
             <img
+            className="h-48 w-full object-cover"
               src={
                 venue.media?.[0]?.url || "/public/assets/images/placeholder.jpg"
               }
