@@ -81,21 +81,28 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
       {filteredVenues.map((venue) => (
-        <div key={venue.id}>
+        <div
+          key={venue.id}
+          className="flex flex-col items-center text-center space-y-2"
+        >
           <img
-            src={venue.media[0]?.url || "/public/assets/images/placeholder.jpg"}
+            src={venue.media[0]?.url || "/assets/images/placeholder.jpg"}
             alt={venue.media[0]?.alt || "Venue image"}
+            className="w-full h-72 object-cover rounded-lg shadow-md"
           />
-          <h3>{venue.name}</h3>
-          <p>Rating: {venue.rating}</p>
-          <p>
+  
+          <p className="text-sm text-gray-700">
             {venue.location.city}, {venue.location.country}
           </p>
-          <p>{venue.price} NOK/ night</p>
+  
+          <p className="text-sm text-gray-800 font-medium">
+            {venue.price} NOK/night
+          </p>
+  
           <Link to={`/venue/${venue.id}`}>
-            <ReusableButton>Book Venue</ReusableButton>
+            <ReusableButton className="mt-2">Book Venue</ReusableButton>
           </Link>
         </div>
       ))}

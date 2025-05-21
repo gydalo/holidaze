@@ -7,7 +7,7 @@ const Layout = () => {
     <div className="">
       <Header />
       {}
-      <main className="">
+      <main className="mx-auto max-w-7xl px-2">
         <Outlet />
       </main>
     </div>

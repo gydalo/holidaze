@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LoginForm from "../../forms/LoginForm";
 import RegisterForm from "../../forms/RegisterForm";
 import Modal from "../../common/PopUp";
@@ -36,7 +36,14 @@ function Header() {
   };
 
   return (
-    <div className="">
+    <div className=" bg-white shadow-md">
+      <div className="mx-auto max-w-7xl px-4 flex justify-between items-center p-2 ">
+      <div>
+        <Link to={'/'}>
+        <img className="w-20" src="./public/assets/images/holidaze-logo.png" alt="" />
+        </Link>
+      </div>
+      <div className="flex gap-12">
       {!loggedIn && (
         <>
           <button onClick={() => openModal("login")}>Login</button>
@@ -46,10 +53,11 @@ function Header() {
 
       {loggedIn && (
         <>
-          <button onClick={goToProfile}>My Profile</button>
+          <button onClick={goToProfile}>Profile</button>
           <LogoutButton />
         </>
       )}
+      </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         {authMode === "login" ? (
@@ -72,6 +80,7 @@ function Header() {
           </>
         )}
       </Modal>
+      </div>
     </div>
   );
 }
