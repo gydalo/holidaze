@@ -150,13 +150,13 @@ function VenueDetails() {
             </div>
           </div>
         )}
+
+        <p className="text-lg font-medium mb-4">
+          {venue.location.city}, {venue.location.country}
+        </p>
       </div>
 
-      <p className="text-lg font-medium mb-4">
-        {venue.location.city}, {venue.location.country}
-      </p>
-
-      <div className="grid grid-cols-1 lg:grid-cols-8 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-8 gap-24">
         <div className="space-y-4 col-span-4 md:col-span-5">
           <h1 className="text-2xl font-bold">{venue.name}</h1>
           <p>{venue.description}</p>
@@ -270,12 +270,24 @@ function VenueDetails() {
             }}
           />
         )}
-      <EditVenueModal
-        venueId={venue.id}
-        isOpen={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        onSuccess={() => {}}
-      />
+<EditVenueModal
+  venueId={venue.id}
+  isOpen={editModalOpen}
+  onClose={() => setEditModalOpen(false)}
+  onSuccess={() => {
+    setEditModalOpen(false);
+
+    (async () => {
+      if (!id) return;
+      try {
+        const data = await getVenueById(id);
+        setVenue(data);
+      } catch {
+        setError("Could not refresh venue after edit.");
+      }
+    })();
+  }}
+/>
     </div>
   );
 }
