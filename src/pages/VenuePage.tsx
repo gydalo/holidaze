@@ -118,9 +118,9 @@ function VenueDetails() {
         {venue.location.city}, {venue.location.country}
       </p>
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-8 gap-12">
         {/* Left Side */}
-        <div className="space-y-4">
+        <div className="space-y-4 col-span-4 md:col-span-5">
           <h1 className="text-2xl font-bold">{venue.name}</h1>
           <p>{venue.description}</p>
           <div>
@@ -160,8 +160,9 @@ function VenueDetails() {
         </div>
 
         {/* Right Side */}
-        <div className="space-y-4">
+        <div className="space-y-4 col-span-4 md:col-span-3">
           <h2 className="text-xl font-bold">Booking</h2>
+          <div className="border p-6 rounded shadow-md w-full">
           <p className="text-lg">{venue.price} NOK / night</p>
           {!isOwner && (
             <VenueBooking
@@ -173,7 +174,8 @@ function VenueDetails() {
               onBookingSuccess={handleBookingSuccess}
             />
           )}
-        </div>
+          </div>
+          </div>
       </div>
 
       {/* Modals */}

@@ -116,7 +116,7 @@ function ProfilePage() {
             <div className="sm:mt-[5rem] flex gap-6 flex-col">
               <div>
                 <h2 className="text-2xl font-semibold">{profile.name}</h2>
-                <p className="text-gray-700 text-sm">{profile.email}</p>
+                <p className="text-gray-700">{profile.email}</p>
               </div>
               <div className="flex gap-2">
                 <ReusableButton onClick={() => setIsEditProfileModalOpen(true)}>
@@ -131,7 +131,7 @@ function ProfilePage() {
                 )}
               </div>
               {profile.bio && (
-                <p className="text-gray-600 text-sm leading-relaxed max-w-prose">
+                <p>
                   {profile.bio}
                 </p>
               )}

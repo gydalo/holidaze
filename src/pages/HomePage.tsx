@@ -39,7 +39,7 @@ function HomePage() {
             alt="Holidaze logo"
             className="w-40"
           />
-          <div className="flex items-center bg-white border rounded-full shadow-md overflow-hidden px-4 py-4 space-x-2 w-full max-w-[700px]">
+          <div className="flex items-center bg-white border rounded-full shadow-md overflow-hidden px-4 py-4 space-x-2 w-full max-w-[900px]">
             <Calendar
               onDateChange={setDateRange}
               value={dateRange}

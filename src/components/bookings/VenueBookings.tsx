@@ -97,7 +97,7 @@ const VenueBooking = ({
   const total = priceBeforeFees + cleaningFee + securityFee;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4">         
       <label className="block font-medium">
         Guests (max {maxGuests}):
         <input
@@ -110,12 +110,15 @@ const VenueBooking = ({
         />
       </label>
 
+<div className="w-full">
       <Calendar
         onDateChange={onDateChange}
         value={selectedDates}
         disabledRanges={bookedRanges.map(({ start, end }) => [start, end])}
         variant="venuepage"
       />
+
+</div>
 
       {selectedDates[0] && selectedDates[1] && (
         <div className="border-t pt-4 text-sm space-y-1">
@@ -133,8 +136,9 @@ const VenueBooking = ({
           <p className="font-bold text-base">Total: {total} NOK</p>
         </div>
       )}
-
+<div className="flex justify-center pt-10">
       <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
+      </div>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>

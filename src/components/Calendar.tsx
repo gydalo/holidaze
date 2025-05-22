@@ -8,6 +8,7 @@ interface CalendarProps {
   disabledRanges?: [Date, Date][];
   variant?: "homepage" | "venuepage";
 }
+
 const Calendar: React.FC<CalendarProps> = ({
   onDateChange,
   value,
@@ -27,64 +28,62 @@ const Calendar: React.FC<CalendarProps> = ({
     return disabledRanges.some(([start, end]) => date >= start && date <= end);
   };
 
+  const formattedDate = (date: Date | null) =>
+    date ? date.toLocaleDateString("en-GB") : "";
+
+  const getCustomInput = (variantStyle: string, withBorder: boolean = true) => (
+    <div
+      className={`flex justify-between text-sm text-gray-700 divide-x divide-gray-300 whitespace-nowrap overflow-x-auto ${
+        withBorder ? "bg-white border rounded-full shadow-sm" : ""
+      } ${variantStyle}`}
+    >
+      <div className="px-4 py-2 w-1/2 font-lateef  text-gray-700">
+        {formattedDate(selectedDates[0]) || "Check in"}
+      </div>
+      <div className="px-4 py-2 w-1/2 font-lateef  text-gray-700">
+        {formattedDate(selectedDates[1]) || "Check out"}
+      </div>
+    </div>
+  );
+
   if (variant === "homepage") {
     return (
-      <div className="flex space-x-2 w-full max-w-full sm:max-w-[300px] md:max-w-[360px]">
-        <DatePicker
-          selected={selectedDates[0]}
-          onChange={handleChange}
-          startDate={selectedDates[0]}
-          endDate={selectedDates[1]}
-          selectsRange
-          placeholderText="Check in"
-          className="outline-none w-full text-sm pr-4 border-r"
-          minDate={new Date()}
-          filterDate={(date) => !isDateDisabled(date)}
-        />
-        <DatePicker
-          selected={selectedDates[1]}
-          onChange={handleChange}
-          startDate={selectedDates[0]}
-          endDate={selectedDates[1]}
-          selectsRange
-          placeholderText="Check out"
-          className="outline-none w-full text-sm pr-4 border-r"
-          minDate={selectedDates[0] || new Date()}
-          filterDate={(date) => !isDateDisabled(date)}
-        />
-      </div>
-    );
-  }
-
- if (variant === "venuepage") {
-  return (
-    <div className="flex items-center border rounded-full shadow-sm overflow-hidden divide-x divide-gray-300 bg-white">
       <DatePicker
         selected={selectedDates[0]}
         onChange={handleChange}
         startDate={selectedDates[0]}
         endDate={selectedDates[1]}
         selectsRange
-        placeholderText="Check in"
-        className="px-4 py-2 outline-none bg-transparent text-sm"
         minDate={new Date()}
         filterDate={(date) => !isDateDisabled(date)}
+        customInput={getCustomInput(
+          "w-full min-w-[320px] sm:min-w-[400px] md:min-w-[520px] lg:min-w-[620px]",
+          false
+        )}
       />
+    );
+  }
+
+  if (variant === "venuepage") {
+    return (
       <DatePicker
-        selected={selectedDates[1]}
+        selected={selectedDates[0]}
         onChange={handleChange}
         startDate={selectedDates[0]}
         endDate={selectedDates[1]}
         selectsRange
-        placeholderText="Check out"
-        className="px-4 py-2 outline-none bg-transparent text-sm"
-        minDate={selectedDates[0] || new Date()}
+        minDate={new Date()}
         filterDate={(date) => !isDateDisabled(date)}
+        customInput={getCustomInput(
+          "w-full px-2 py-2",
+          true
+        )}
       />
-    </div>
-  );
-}
-  return null;
+    );
+  }
 
+  return null;
 };
+
 export default Calendar;
+
