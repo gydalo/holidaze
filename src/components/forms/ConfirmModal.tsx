@@ -18,10 +18,10 @@ function ConfirmModal({
 }: ConfirmModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onCancel}>
-      <div>
-        {title && <h2>{title}</h2>}
-        <p>{message}</p>
-        <div className="">
+      <div className="text-center p-4">
+        {title && <h2 className="text-xl  mb-6">{title}</h2>}
+        <p className="mb-6">{message}</p>
+        <div className="flex justify-center gap-4">
           <ReusableButton onClick={onConfirm}>Yes, Delete</ReusableButton>
           <ReusableButton onClick={onCancel}>Cancel</ReusableButton>
         </div>

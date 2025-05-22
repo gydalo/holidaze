@@ -7,6 +7,7 @@ import ConfirmModal from "../components/forms/ConfirmModal";
 import EditVenueModal from "../components/forms/EditVenue";
 import VenueBooking from "../components/bookings/VenueBookings";
 import BookingConfirmation from "../components/forms/BookingConfirmation";
+import Modal from "../components/common/PopUp";
 
 type Venue = {
   id: string;
@@ -58,6 +59,9 @@ function VenueDetails() {
     [Date | null, Date | null]
   >([null, null]);
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+
   const storedProfile = localStorage.getItem("profile");
   const currentUser = storedProfile ? JSON.parse(storedProfile)?.data : null;
   const isOwner = venue && currentUser?.name === venue.owner.name;
@@ -103,28 +107,61 @@ function VenueDetails() {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      {/* Images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        {venue.media?.map((img, idx) => (
+      {/* Image Layout */}
+      <div className="mb-6">
+        {venue.media.length === 1 ? (
           <img
-            key={idx}
-            src={img.url}
-            alt={img.alt || venue.name}
-            className="w-full h-64 object-cover rounded"
+            src={venue.media[0].url}
+            alt={venue.media[0].alt || venue.name}
+            className="w-full h-[400px] object-cover rounded-md"
           />
-        ))}
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-2">
+              <img
+                src={venue.media[selectedImageIndex].url}
+                alt={venue.media[selectedImageIndex].alt || venue.name}
+                className="w-full h-[400px] object-cover object-center rounded-md"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              {venue.media.slice(0, 3).map((img, index) => (
+                <img
+                  key={index}
+                  src={img.url}
+                  alt={img.alt || venue.name}
+                  onClick={() => {
+                    setSelectedImageIndex(index);
+                    if (venue.media.length > 4) {
+                      setImageModalOpen(true);
+                    }
+                  }}
+                  className="w-full h-[120px] object-cover object-center rounded-md cursor-pointer hover:opacity-80 transition"
+                />
+              ))}
+              {venue.media.length > 4 && (
+                <button
+                  onClick={() => setImageModalOpen(true)}
+                  className="text-sm text-blue-600 mt-1 hover:underline"
+                >
+                  View all {venue.media.length} images
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
+
       <p className="text-lg font-medium mb-4">
         {venue.location.city}, {venue.location.country}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-8 gap-12">
-        {/* Left Side */}
         <div className="space-y-4 col-span-4 md:col-span-5">
           <h1 className="text-2xl font-bold">{venue.name}</h1>
           <p>{venue.description}</p>
           <div>
-            <h2 className="font-semibold">Amenities</h2>
+            <h2 className="">Amenities</h2>
             <ul className="list-disc ml-6">
               <li>Wifi: {venue.meta.wifi ? "Yes" : "No"}</li>
               <li>Breakfast: {venue.meta.breakfast ? "Yes" : "No"}</li>
@@ -133,14 +170,14 @@ function VenueDetails() {
             </ul>
           </div>
           <div>
-            <h2 className="font-semibold">Address</h2>
+            <h2 className="">Address</h2>
             <p>
               {venue.location.address}, {venue.location.zip},{" "}
               {venue.location.city}, {venue.location.country}
             </p>
           </div>
           <div>
-            <h2 className="font-semibold">Owner</h2>
+            <h2 className="">Owner</h2>
             <p>
               {venue.owner.name} ({venue.owner.email})
             </p>
@@ -159,26 +196,51 @@ function VenueDetails() {
           )}
         </div>
 
-        {/* Right Side */}
         <div className="space-y-4 col-span-4 md:col-span-3">
           <h2 className="text-xl font-bold">Booking</h2>
           <div className="border p-6 rounded shadow-md w-full">
-          <p className="text-lg">{venue.price} NOK / night</p>
-          {!isOwner && (
-            <VenueBooking
-              venueId={venue.id}
-              price={venue.price}
-              maxGuests={venue.maxGuests}
-              selectedDates={bookingDates}
-              onDateChange={setBookingDates}
-              onBookingSuccess={handleBookingSuccess}
-            />
-          )}
+            <p className="text-lg">{venue.price} NOK / night</p>
+            {!isOwner && (
+              <VenueBooking
+                venueId={venue.id}
+                price={venue.price}
+                maxGuests={venue.maxGuests}
+                selectedDates={bookingDates}
+                onDateChange={setBookingDates}
+                onBookingSuccess={handleBookingSuccess}
+              />
+            )}
           </div>
-          </div>
+        </div>
       </div>
 
-      {/* Modals */}
+      {/* Image Modal */}
+      <Modal isOpen={imageModalOpen} onClose={() => setImageModalOpen(false)}>
+        <div className="flex flex-col items-center gap-4">
+          <img
+            src={venue.media[selectedImageIndex].url}
+            alt={venue.media[selectedImageIndex].alt || venue.name}
+            className="h-[500px] w-auto object-cover object-center rounded"
+          />
+          <div className="flex gap-2 overflow-x-auto mt-4">
+            {venue.media.map((img, idx) => (
+              <img
+                key={idx}
+                src={img.url}
+                alt={img.alt || venue.name}
+                onClick={() => setSelectedImageIndex(idx)}
+                className={`h-20 w-28 object-cover rounded-md cursor-pointer border ${
+                  selectedImageIndex === idx
+                    ? "border-blue-500"
+                    : "border-transparent"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </Modal>
+
+      {/* Other Modals */}
       <ConfirmModal
         isOpen={showConfirmModal}
         title="Delete Venue"

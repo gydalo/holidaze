@@ -115,7 +115,7 @@ function ProfilePage() {
             />
             <div className="sm:mt-[5rem] flex gap-6 flex-col">
               <div>
-                <h2 className="text-2xl font-semibold">{profile.name}</h2>
+                <h2 className="text-2xl ">{profile.name}</h2>
                 <p className="text-gray-700">{profile.email}</p>
               </div>
               <div className="flex gap-2">
@@ -130,11 +130,7 @@ function ProfilePage() {
                   </ReusableButton>
                 )}
               </div>
-              {profile.bio && (
-                <p>
-                  {profile.bio}
-                </p>
-              )}
+              {profile.bio && <p>{profile.bio}</p>}
             </div>
           </div>
         </div>
@@ -164,7 +160,7 @@ function ProfilePage() {
 
           {isVenueManager && (
             <div className="mt-8 w-full">
-              <h3 className="font-semibold text-lg mb-2">Venues</h3>
+              <h3 className=" text-lg mb-2">Venues</h3>
               <OwnedVenues />
             </div>
           )}
