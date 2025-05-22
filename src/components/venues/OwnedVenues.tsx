@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getProfile } from "../../api/auth/profile";
 
-function OwnedVenues() {
-  interface Venue {
-    id: string;
-    name: string;
-    media?: { url: string; alt?: string }[];
-    location?: { city?: string; country?: string };
-  }
+interface Props {
+  refreshKey?: boolean;
+}
 
+interface Venue {
+  id: string;
+  name: string;
+  media?: { url: string; alt?: string }[];
+  location?: { city?: string; country?: string };
+}
+
+function OwnedVenues({ refreshKey }: Props) {
   const [ownedVenues, setOwnedVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -37,7 +41,7 @@ function OwnedVenues() {
     }
 
     fetchOwnedVenues();
-  }, []);
+  }, [refreshKey]); // re-fetch when refreshKey changes
 
   if (loading) return <p>Loading venues...</p>;
   if (error.trim()) return <p>{error}</p>;
@@ -52,7 +56,7 @@ function OwnedVenues() {
               <h3>{venue.name}</h3>
             </div>
             <img
-            className="h-48 w-full object-cover"
+              className="h-48 w-full object-cover"
               src={
                 venue.media?.[0]?.url || "/public/assets/images/placeholder.jpg"
               }

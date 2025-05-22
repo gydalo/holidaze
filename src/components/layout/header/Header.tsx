@@ -40,7 +40,7 @@ function Header() {
       <div className="mx-auto max-w-7xl px-4 flex justify-between items-center p-2 ">
       <div>
         <Link to={'/'}>
-        <img className="w-20" src="./public/assets/images/holidaze-logo.png" alt="" />
+        <img className="w-20" src="/public/assets/images/holidaze-logo.png" alt="" />
         </Link>
       </div>
       <div className="flex gap-12">

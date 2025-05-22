@@ -31,6 +31,7 @@ function ProfilePage() {
   const [message, setMessage] = useState("");
   const [isCreateVenueModalOpen, setIsCreateVenueModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [venuesChanged, setVenuesChanged] = useState(false);
 
   useEffect(() => {
     const storedProfile = load<{ data: Profile }>("profile")?.data;
@@ -161,7 +162,7 @@ function ProfilePage() {
           {isVenueManager && (
             <div className="mt-8 w-full">
               <h3 className=" text-lg mb-2">Venues</h3>
-              <OwnedVenues />
+              <OwnedVenues refreshKey={venuesChanged} />
             </div>
           )}
         </div>
@@ -179,7 +180,12 @@ function ProfilePage() {
         isOpen={isCreateVenueModalOpen}
         onClose={() => setIsCreateVenueModalOpen(false)}
       >
-        <CreateVenue onSuccess={() => setIsCreateVenueModalOpen(false)} />
+  <CreateVenue
+  onSuccess={() => {
+    setIsCreateVenueModalOpen(false);
+    setVenuesChanged((prev) => !prev);
+  }}
+/>
       </Modal>
 
       <EditProfileModal
