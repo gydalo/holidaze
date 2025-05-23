@@ -36,7 +36,7 @@ function HomePage() {
       <div className="relative flex items-center justify-center min-h-[50vh]">
         <div className="hidden md:block absolute top-0 xl:top-4 left-0 p-6">
           <img
-            src="/public/assets/images/palm.png"
+            src="/assets/images/palm.png"
             alt="Sketch of two palmtrees"
             className="h-60 xl:h-72 object-contain"
           />
@@ -44,7 +44,7 @@ function HomePage() {
 
         <div className="flex flex-col items-center space-y-6 z-10">
           <img
-            src="/public/assets/images/holidaze-logo-slogan.png"
+            src="/assets/images/holidaze-logo-slogan.png"
             alt="Holidaze logo"
             className="w-40"
           />

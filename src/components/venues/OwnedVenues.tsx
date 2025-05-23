@@ -57,9 +57,7 @@ function OwnedVenues({ refreshKey }: Props) {
             </div>
             <img
               className="h-48 w-full object-cover"
-              src={
-                venue.media?.[0]?.url || "/public/assets/images/placeholder.jpg"
-              }
+              src={venue.media?.[0]?.url || "/assets/images/placeholder.jpg"}
               alt={venue.media?.[0]?.alt || venue.name}
             />
           </Link>

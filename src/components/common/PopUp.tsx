@@ -10,12 +10,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-   
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="relative bg-white rounded-2xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
         <img
           className="w-32 justify-center mx-auto mb-8"
-          src="/public/assets/images/holidaze-logo-slogan.png"
+          src="/assets/images/holidaze-logo-slogan.png"
           alt="Logo"
         />
 
