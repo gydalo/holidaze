@@ -42,7 +42,7 @@ function Header() {
           <Link to={"/"}>
             <img
               className="w-20"
-              src="./public/assets/images/holidaze-logo.png"
+              src="/assets/images/holidaze-logo.png"
               alt=""
             />
           </Link>
