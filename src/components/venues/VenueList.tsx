@@ -34,7 +34,10 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
         const venueData = await getVenues();
         const sorted = venueData
           .slice()
-          .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+          .sort(
+            (a, b) =>
+              new Date(b.created).getTime() - new Date(a.created).getTime()
+          );
         setVenues(sorted);
       } catch {
         setError("Could not load data.");
@@ -42,7 +45,7 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
         setLoading(false);
       }
     }
-  
+
     fetchData();
   }, []);
 
@@ -83,27 +86,23 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
       {filteredVenues.map((venue) => (
-        <div
-          key={venue.id}
-          className="flex flex-col items-center text-center space-y-2"
-        >
+        <div key={venue.id} className="flex flex-col space-y-2">
           <img
             src={venue.media[0]?.url || "/assets/images/placeholder.jpg"}
             alt={venue.media[0]?.alt || "Venue image"}
             className="w-full h-72 object-cover rounded-lg shadow-md"
           />
-  
-          <p className="text-sm text-gray-700">
+
+          <h2 className="">
             {venue.location.city}, {venue.location.country}
-          </p>
-  
-          <p className="text-sm text-gray-800 font-medium">
-            {venue.price} NOK/night
-          </p>
-  
-          <Link to={`/venue/${venue.id}`}>
-            <ReusableButton className="mt-2">Book Venue</ReusableButton>
-          </Link>
+          </h2>
+
+          <p className="">{venue.price} NOK/night</p>
+          <div className="flex justify-center pt-4 pb-6">
+            <Link to={`/venue/${venue.id}`}>
+              <ReusableButton className="mt-2">Book Venue</ReusableButton>
+            </Link>
+          </div>
         </div>
       ))}
     </div>

@@ -120,7 +120,10 @@ function ProfilePage() {
                 <p className="text-gray-700">{profile.email}</p>
               </div>
               <div className="flex gap-2">
-                <ReusableButton onClick={() => setIsEditProfileModalOpen(true)}>
+                <ReusableButton
+                  className="bg-transparent text-[#4B614F] border border-[#4B614F] hover:bg-[#4B614F] hover:text-white transition"
+                  onClick={() => setIsEditProfileModalOpen(true)}
+                >
                   Edit Profile
                 </ReusableButton>
                 {isVenueManager && (
@@ -180,12 +183,12 @@ function ProfilePage() {
         isOpen={isCreateVenueModalOpen}
         onClose={() => setIsCreateVenueModalOpen(false)}
       >
-  <CreateVenue
-  onSuccess={() => {
-    setIsCreateVenueModalOpen(false);
-    setVenuesChanged((prev) => !prev);
-  }}
-/>
+        <CreateVenue
+          onSuccess={() => {
+            setIsCreateVenueModalOpen(false);
+            setVenuesChanged((prev) => !prev);
+          }}
+        />
       </Modal>
 
       <EditProfileModal

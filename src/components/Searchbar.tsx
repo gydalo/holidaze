@@ -1,4 +1,4 @@
-import React from "react";
+/**import React from "react";
 
 interface SearchbarProps {
   searchQuery: string;
@@ -19,4 +19,4 @@ const Searchbar: React.FC<SearchbarProps> = ({ searchQuery, setSearchQuery }) =>
   );
 };
 
-export default Searchbar;
+export default Searchbar; **/
