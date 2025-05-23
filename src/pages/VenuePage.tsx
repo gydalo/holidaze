@@ -159,7 +159,7 @@ function VenueDetails() {
 
       <div className="grid grid-cols-1 lg:grid-cols-8 gap-24">
         <div className="space-y-4 col-span-4 md:col-span-5">
-          <h1 className="text-2xl font-bold">{venue.name}</h1>
+          <h1 className="text-xl">{venue.name}</h1>
           <p>{venue.description}</p>
           <div>
             <h2 className="">Amenities</h2>
@@ -198,24 +198,23 @@ function VenueDetails() {
         </div>
 
         <div className="space-y-4 col-span-4 md:col-span-3">
-          <h2 className="text-xl font-bold">Booking</h2>
+          <h2 className="text-xl">Booking</h2>
           <div className="border p-6 rounded shadow-md w-full">
             <p className="text-lg">{venue.price} NOK / night</p>
             {!isOwner && (
               <VenueBooking
-  venueId={venue.id}
-  price={venue.price}
-  maxGuests={venue.maxGuests}
-  selectedDates={bookingDates}
-  onDateChange={setBookingDates}
-  onBookingSuccess={(from, to) => {
-    setConfirmedBookingDates([new Date(from), new Date(to)]);
-    setShowConfirmation(true);
-    setBookingRefreshKey((prev) => prev + 1);
-  }}
-  refreshKey={bookingRefreshKey}
-/>
-
+                venueId={venue.id}
+                price={venue.price}
+                maxGuests={venue.maxGuests}
+                selectedDates={bookingDates}
+                onDateChange={setBookingDates}
+                onBookingSuccess={(from, to) => {
+                  setConfirmedBookingDates([new Date(from), new Date(to)]);
+                  setShowConfirmation(true);
+                  setBookingRefreshKey((prev) => prev + 1);
+                }}
+                refreshKey={bookingRefreshKey}
+              />
             )}
           </div>
         </div>
@@ -277,24 +276,24 @@ function VenueDetails() {
             }}
           />
         )}
-<EditVenueModal
-  venueId={venue.id}
-  isOpen={editModalOpen}
-  onClose={() => setEditModalOpen(false)}
-  onSuccess={() => {
-    setEditModalOpen(false);
+      <EditVenueModal
+        venueId={venue.id}
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSuccess={() => {
+          setEditModalOpen(false);
 
-    (async () => {
-      if (!id) return;
-      try {
-        const data = await getVenueById(id);
-        setVenue(data);
-      } catch {
-        setError("Could not refresh venue after edit.");
-      }
-    })();
-  }}
-/>
+          (async () => {
+            if (!id) return;
+            try {
+              const data = await getVenueById(id);
+              setVenue(data);
+            } catch {
+              setError("Could not refresh venue after edit.");
+            }
+          })();
+        }}
+      />
     </div>
   );
 }
