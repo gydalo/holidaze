@@ -4,7 +4,7 @@ const LogoutButton = () => {
   const { logout } = useAuth();
 
   return (
-    <button onClick={logout}>
+    <button className='hover:underline hover:underline-offset-2 cursor-pointer text-sm' onClick={logout}>
       Logout
     </button>
   );

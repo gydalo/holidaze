@@ -27,31 +27,28 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="">
-        <h2 className="">
-          Booking Confirmed!
-        </h2>
+      <div className="space-y-6 text-center max-w-md mx-auto">
+        <h2 className="">Booking Confirmed!</h2>
 
         {venue.media?.[0]?.url && (
           <img
             src={venue.media[0].url}
             alt={venue.media[0].alt || venue.name}
-            className=""
+            className="w-full h-48 object-cover rounded-lg shadow-md"
           />
         )}
 
-        <div className="">
-          <p><span className="">Venue:</span> {venue.name}</p>
-          <p><span className="">Owner:</span> {venue.owner.name}</p>
-          <p><span className="">Address:</span> {venue.address}, {venue.zip} {venue.city}, {venue.country}</p>
-          <p><span className="">From:</span> {new Date(bookingDates.from).toLocaleDateString()}</p>
-          <p><span className="">To:</span> {new Date(bookingDates.to).toLocaleDateString()}</p>
+        <div className="text-left space-y-2 text-sm">
+          <h2>{venue.name}</h2>
+          <p>{venue.owner.name}</p>
+          <p>{venue.address}, {venue.zip} {venue.city}, {venue.country}</p>
+          <p>{new Date(bookingDates.from).toLocaleDateString()} - {new Date(bookingDates.to).toLocaleDateString()}</p>
         </div>
 
-        <div className="">
+        <div className="pt-4">
           <button
             onClick={onClose}
-            className=""
+            className=" transition"
           >
             Close
           </button>

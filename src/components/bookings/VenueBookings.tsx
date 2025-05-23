@@ -12,6 +12,7 @@ interface VenueBookingProps {
   onBookingSuccess?: (from: string, to: string) => void;
   selectedDates: [Date | null, Date | null];
   onDateChange: (dates: [Date | null, Date | null]) => void;
+  refreshKey?: number;
 }
 
 const VenueBooking = ({
@@ -21,6 +22,7 @@ const VenueBooking = ({
   onBookingSuccess,
   selectedDates,
   onDateChange,
+  refreshKey,
 }: VenueBookingProps) => {
   const [bookedRanges, setBookedRanges] = useState<
     { start: Date; end: Date }[]
@@ -28,22 +30,22 @@ const VenueBooking = ({
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const bookings = await getVenueBookings(venueId);
-        const ranges = bookings.map((b) => ({
-          start: new Date(b.dateFrom),
-          end: new Date(b.dateTo),
-        }));
-        setBookedRanges(ranges);
-      } catch (err) {
-        console.error("Failed to load bookings:", err);
-      }
-    };
+  const fetchBookings = async () => {
+    try {
+      const bookings = await getVenueBookings(venueId);
+      const ranges = bookings.map((b) => ({
+        start: new Date(b.dateFrom),
+        end: new Date(b.dateTo),
+      }));
+      setBookedRanges(ranges);
+    } catch (err) {
+      console.error("Failed to load bookings:", err);
+    }
+  };
 
+  useEffect(() => {
     fetchBookings();
-  }, [venueId]);
+  }, [venueId, refreshKey]);
 
   const handleBooking = async () => {
     setError("");
@@ -76,6 +78,8 @@ const VenueBooking = ({
       if (onBookingSuccess) {
         onBookingSuccess(from.toISOString(), to.toISOString());
       }
+
+      await fetchBookings();
     } catch (err) {
       console.error("Booking failed:", err);
       setError("Could not complete booking.");
@@ -97,7 +101,7 @@ const VenueBooking = ({
   const total = priceBeforeFees + cleaningFee + securityFee;
 
   return (
-    <div className="space-y-4">         
+    <div className="space-y-4">
       <label className="block font-medium">
         Guests (max {maxGuests}):
         <input
@@ -110,15 +114,14 @@ const VenueBooking = ({
         />
       </label>
 
-<div className="w-full">
-      <Calendar
-        onDateChange={onDateChange}
-        value={selectedDates}
-        disabledRanges={bookedRanges.map(({ start, end }) => [start, end])}
-        variant="venuepage"
-      />
-
-</div>
+      <div className="w-full">
+        <Calendar
+          onDateChange={onDateChange}
+          value={selectedDates}
+          disabledRanges={bookedRanges.map(({ start, end }) => [start, end])}
+          variant="venuepage"
+        />
+      </div>
 
       {selectedDates[0] && selectedDates[1] && (
         <div className="border-t pt-4 text-sm space-y-1">
@@ -136,8 +139,9 @@ const VenueBooking = ({
           <p className="font-bold text-base">Total: {total} NOK</p>
         </div>
       )}
-<div className="flex justify-center pt-10">
-      <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
+
+      <div className="flex justify-center pt-10">
+        <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
       </div>
 
       {error && <p className="text-red-500 text-sm">{error}</p>}

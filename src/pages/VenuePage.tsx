@@ -58,6 +58,7 @@ function VenueDetails() {
   const [confirmedBookingDates, setConfirmedBookingDates] = useState<
     [Date | null, Date | null]
   >([null, null]);
+  const [bookingRefreshKey, setBookingRefreshKey] = useState(0);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageModalOpen, setImageModalOpen] = useState(false);
@@ -202,13 +203,19 @@ function VenueDetails() {
             <p className="text-lg">{venue.price} NOK / night</p>
             {!isOwner && (
               <VenueBooking
-                venueId={venue.id}
-                price={venue.price}
-                maxGuests={venue.maxGuests}
-                selectedDates={bookingDates}
-                onDateChange={setBookingDates}
-                onBookingSuccess={handleBookingSuccess}
-              />
+  venueId={venue.id}
+  price={venue.price}
+  maxGuests={venue.maxGuests}
+  selectedDates={bookingDates}
+  onDateChange={setBookingDates}
+  onBookingSuccess={(from, to) => {
+    setConfirmedBookingDates([new Date(from), new Date(to)]);
+    setShowConfirmation(true);
+    setBookingRefreshKey((prev) => prev + 1);
+  }}
+  refreshKey={bookingRefreshKey}
+/>
+
             )}
           </div>
         </div>

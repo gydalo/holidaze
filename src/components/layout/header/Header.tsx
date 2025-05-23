@@ -46,14 +46,14 @@ function Header() {
       <div className="flex gap-12">
       {!loggedIn && (
         <>
-          <button onClick={() => openModal("login")}>Login</button>
-          <button onClick={() => openModal("register")}>Register</button>
+          <button className="hover:underline hover:underline-offset-2 cursor-pointer text-sm" onClick={() => openModal("login")}>Login</button>
+          <button className="hover:underline hover:underline-offset-2 cursor-pointer text-sm" onClick={() => openModal("register")}>Register</button>
         </>
       )}
 
       {loggedIn && (
         <>
-          <button onClick={goToProfile}>Profile</button>
+          <button className="hover:underline hover:underline-offset-2 cursor-pointer text-sm" onClick={goToProfile}>Profile</button>
           <LogoutButton />
         </>
       )}
