@@ -6,6 +6,7 @@ type ReusableButtonProps = {
   disabled?: boolean;
   className?: string;
   type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary";
 };
 
 const ReusableButton: React.FC<ReusableButtonProps> = ({
@@ -14,13 +15,24 @@ const ReusableButton: React.FC<ReusableButtonProps> = ({
   disabled = false,
   className = "",
   type = "button",
+  variant = "primary",
 }) => {
+  const base =
+    "py-2 px-6 rounded-full font-medium transition-all duration-200 focus:outline-none focus:ring-2";
+
+  const variants = {
+    primary:
+      "bg-[#4B614F] text-white border border-transparent hover:bg-white hover:text-[#4B614F] hover:border-[#4B614F] focus:ring-[#4B614F]",
+    secondary:
+      "bg-transparent text-[#4B614F] border border-[#4B614F] hover:bg-[#4B614F] hover:text-white transition focus:ring-[#4B614F]",
+  };
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`bg-[#4B614F] text-white py-2 px-6 rounded-full hover:bg-[#3f5142] focus:outline-none focus:ring-2 focus:ring-[#4B614F] transition-all duration-200 ${className}`}
+      className={`${base} ${variants[variant]} ${className}`}
     >
       {children}
     </button>

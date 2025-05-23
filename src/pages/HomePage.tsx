@@ -70,7 +70,7 @@ function HomePage() {
                   placeholder="Search for location here.."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  className="outline-none w-full sm:w-48"
+                  className="outline-none w-full sm:w-48 py-2"
                 />
                 <button onClick={handleSearchClick}>
                   <FontAwesomeIcon

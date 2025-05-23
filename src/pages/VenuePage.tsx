@@ -158,7 +158,7 @@ function VenueDetails() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-6 md:grid-cols-8 md:gap-24">
-        <div className="space-y-4 col-start-2 col-end-6 md:col-span-5">
+        <div className="space-y-4 sm:col-start-2 col-sm:start-2 sm:col-end-6 md:col-span-5">
           <h1 className="text-xl">{venue.name}</h1>
           <p>{venue.description}</p>
           <div>
@@ -197,7 +197,7 @@ function VenueDetails() {
           )}
         </div>
 
-        <div className="space-y-4 col-start-2 col-end-6 mt-12 md:mt-0 md:col-span-3">
+        <div className="space-y-4 sm:col-start-2 sm:col-end-6 mt-12 md:mt-0 md:col-span-3">
           <h2 className="text-xl">Booking</h2>
           <div className="border p-6 rounded-2xl shadow-md w-full">
             <p className="text-lg">{venue.price} NOK / night</p>

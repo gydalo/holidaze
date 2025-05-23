@@ -9,6 +9,9 @@ export default {
         alata: ['Alata', ...defaultTheme.fontFamily.sans],
         lateef: ['Lateef', ...defaultTheme.fontFamily.sans],
       },
+      screens: {
+        xs: "541px",
+      },
     },
   },
   plugins: [],
