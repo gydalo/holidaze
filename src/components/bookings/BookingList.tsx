@@ -145,8 +145,8 @@ const BookingsList = () => {
               ))}
             </div>
             {(customerUpcoming.length + customerPast.length) > 4 && (
-              <div className="text-center">
-                <ReusableButton onClick={() => setModalOpen("customer")}>See All My Bookings</ReusableButton>
+              <div className="text-center pt-6">
+                <ReusableButton onClick={() => setModalOpen("customer")}>See All Bookings</ReusableButton>
               </div>
             )}
           </div>

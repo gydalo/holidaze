@@ -36,7 +36,7 @@ function Header() {
   };
 
   return (
-    <div className=" bg-white shadow-md">
+    <div className=" bg-white shadow-md sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 flex justify-between items-center p-2 ">
       <div>
         <Link to={'/'}>
