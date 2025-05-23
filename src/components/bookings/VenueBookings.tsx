@@ -143,8 +143,9 @@ const VenueBooking = ({
       <div className="flex justify-center pt-10">
         <ReusableButton onClick={handleBooking}>Book Venue</ReusableButton>
       </div>
-
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <div className="flex justify-center">
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+      </div>
     </div>
   );
 };
