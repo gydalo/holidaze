@@ -67,17 +67,17 @@ const Calendar: React.FC<CalendarProps> = ({
   if (variant === "venuepage") {
     return (
       <div className="w-full">
-      <DatePicker
-        selected={selectedDates[0]}
-        onChange={handleChange}
-        startDate={selectedDates[0]}
-        endDate={selectedDates[1]}
-        selectsRange
-        minDate={new Date()}
-        filterDate={(date) => !isDateDisabled(date)}
-        customInput={getCustomInput("w-full px-2 py-2 overflow-hidden", true)}
-        wrapperClassName="w-full"
-      />
+        <DatePicker
+          selected={selectedDates[0]}
+          onChange={handleChange}
+          startDate={selectedDates[0]}
+          endDate={selectedDates[1]}
+          selectsRange
+          minDate={new Date()}
+          filterDate={(date) => !isDateDisabled(date)}
+          customInput={getCustomInput("w-full px-2 py-2 overflow-hidden", true)}
+          wrapperClassName="w-full"
+        />
       </div>
     );
   }

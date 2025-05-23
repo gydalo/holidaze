@@ -209,8 +209,7 @@ function VenueDetails() {
                 selectedDates={bookingDates}
                 onDateChange={setBookingDates}
                 onBookingSuccess={(from, to) => {
-                  setConfirmedBookingDates([new Date(from), new Date(to)]);
-                  setShowConfirmation(true);
+                  handleBookingSuccess(from, to);
                   setBookingRefreshKey((prev) => prev + 1);
                 }}
                 refreshKey={bookingRefreshKey}

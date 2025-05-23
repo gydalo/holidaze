@@ -41,7 +41,7 @@ function OwnedVenues({ refreshKey }: Props) {
     }
 
     fetchOwnedVenues();
-  }, [refreshKey]); // re-fetch when refreshKey changes
+  }, [refreshKey]);
 
   if (loading) return <p>Loading venues...</p>;
   if (error.trim()) return <p>{error}</p>;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import ReusableButton from "../ReusableButton";
 import Calendar from "../Calendar";
@@ -30,7 +30,7 @@ const VenueBooking = ({
   const [guests, setGuests] = useState(1);
   const [error, setError] = useState("");
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       const bookings = await getVenueBookings(venueId);
       const ranges = bookings.map((b) => ({
@@ -41,11 +41,11 @@ const VenueBooking = ({
     } catch (err) {
       console.error("Failed to load bookings:", err);
     }
-  };
+  }, [venueId]);
 
   useEffect(() => {
     fetchBookings();
-  }, [venueId, refreshKey]);
+  }, [fetchBookings, refreshKey]);
 
   const handleBooking = async () => {
     setError("");

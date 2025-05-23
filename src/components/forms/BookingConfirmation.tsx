@@ -15,7 +15,7 @@ type BookingConfirmationProps = {
   };
   bookingDates: {
     from: string;
-    to: string; 
+    to: string;
   };
 };
 
@@ -41,15 +41,17 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
         <div className="text-left space-y-2 text-sm">
           <h2>{venue.name}</h2>
           <p>{venue.owner.name}</p>
-          <p>{venue.address}, {venue.zip} {venue.city}, {venue.country}</p>
-          <p>{new Date(bookingDates.from).toLocaleDateString()} - {new Date(bookingDates.to).toLocaleDateString()}</p>
+          <p>
+            {venue.address}, {venue.zip} {venue.city}, {venue.country}
+          </p>
+          <p>
+            {new Date(bookingDates.from).toLocaleDateString()} -{" "}
+            {new Date(bookingDates.to).toLocaleDateString()}
+          </p>
         </div>
 
         <div className="pt-4">
-          <button
-            onClick={onClose}
-            className=" transition"
-          >
+          <button onClick={onClose} className=" transition">
             Close
           </button>
         </div>

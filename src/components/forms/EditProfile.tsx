@@ -84,7 +84,10 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-center mb-6">Edit Profile</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 max-w-lg mx-auto"
+      >
         <div>
           <label className="block font-medium mb-1">Avatar URL</label>
           <input
@@ -93,7 +96,7 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
           />
         </div>
-  
+
         <div>
           <label className="block font-medium mb-1">Banner URL</label>
           <input
@@ -102,7 +105,7 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
           />
         </div>
-  
+
         <div>
           <label className="block font-medium mb-1">Bio</label>
           <textarea
@@ -111,9 +114,9 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
           />
         </div>
-  
+
         {error && <p className="text-red-500 text-center">{error}</p>}
-  
+
         <ReusableButton type="submit" className="w-full rounded-lg">
           Save Changes
         </ReusableButton>

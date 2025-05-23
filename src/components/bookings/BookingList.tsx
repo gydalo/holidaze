@@ -25,6 +25,17 @@ interface Booking {
   };
 }
 
+interface RawBooking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+  customer?: {
+    name: string;
+    email: string;
+  };
+}
+
 const formatDate = (dateStr: string) => {
   const date = new Date(dateStr);
   return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
@@ -42,7 +53,9 @@ const BookingCard = ({ booking }: { booking: Booking }) => (
       {formatDate(booking.dateFrom)} - {formatDate(booking.dateTo)}
     </p>
     <p className="text-sm">Guests: {booking.guests}</p>
-    {booking.customer && <p className="text-sm">Booked by: {booking.customer.name}</p>}
+    {booking.customer && (
+      <p className="text-sm">Booked by: {booking.customer.name}</p>
+    )}
   </Link>
 );
 
@@ -57,52 +70,75 @@ const BookingsList = () => {
   useEffect(() => {
     async function fetchBookings() {
       try {
-        const storedProfile = load<{ data: { name: string; venueManager?: boolean } }>("profile");
+        const storedProfile = load<{
+          data: { name: string; venueManager?: boolean };
+        }>("profile");
         if (!storedProfile?.data) return;
 
         const { name: loggedInUser, venueManager } = storedProfile.data;
         const now = new Date();
 
-        const customerResponse = await authFetch(`${API_PROFILE}/${loggedInUser}/bookings?_venue=true&_customer=true`);
+        const customerResponse = await authFetch(
+          `${API_PROFILE}/${loggedInUser}/bookings?_venue=true&_customer=true`
+        );
         const customerJson = await customerResponse.json();
         const customerBookings: Booking[] = customerJson.data;
 
         const managerVenueBookings: Booking[] = [];
 
         if (venueManager) {
-          const profileResponse = await authFetch(`${API_PROFILE}/${loggedInUser}?_venues=true`);
+          const profileResponse = await authFetch(
+            `${API_PROFILE}/${loggedInUser}?_venues=true`
+          );
           const profileJson = await profileResponse.json();
-          const ownedVenues: { id: string; name: string; media?: { url: string; alt?: string }[]; owner?: { name: string } }[] = profileJson.data.venues || [];
+          const ownedVenues: {
+            id: string;
+            name: string;
+            media?: { url: string; alt?: string }[];
+            owner?: { name: string };
+          }[] = profileJson.data.venues || [];
 
           for (const venue of ownedVenues) {
             const venueId = venue.id;
-            const venueResponse = await authFetch(`${API_VENUES_URL}/${venueId}?_bookings=true&_bookings_customer=true`);
+            const venueResponse = await authFetch(
+              `${API_VENUES_URL}/${venueId}?_bookings=true&_bookings_customer=true`
+            );
             if (venueResponse.ok) {
               const venueData = await venueResponse.json();
-              const bookings: Booking[] = (venueData.data.bookings || []).map((booking: any): Booking => {
-                return {
-                  id: booking.id,
-                  dateFrom: booking.dateFrom,
-                  dateTo: booking.dateTo,
-                  guests: booking.guests,
-                  customer: booking.customer,
-                  venue: {
-                    id: venueId,
-                    name: venueData.data.name,
-                    media: venueData.data.media,
-                    owner: { name: venueData.data.owner?.name || "Unknown" },
-                  },
-                };
-              });
+              const bookings: Booking[] = (venueData.data.bookings || []).map(
+                (booking: RawBooking): Booking => {
+                  return {
+                    id: booking.id,
+                    dateFrom: booking.dateFrom,
+                    dateTo: booking.dateTo,
+                    guests: booking.guests,
+                    customer: booking.customer,
+                    venue: {
+                      id: venueId,
+                      name: venueData.data.name,
+                      media: venueData.data.media,
+                      owner: { name: venueData.data.owner?.name || "Unknown" },
+                    },
+                  };
+                }
+              );
               managerVenueBookings.push(...bookings);
             }
           }
         }
 
-        setCustomerUpcoming(customerBookings.filter((b: Booking) => new Date(b.dateTo) >= now));
-        setCustomerPast(customerBookings.filter((b: Booking) => new Date(b.dateTo) < now));
-        setVenueUpcoming(managerVenueBookings.filter((b: Booking) => new Date(b.dateTo) >= now));
-        setVenuePast(managerVenueBookings.filter((b: Booking) => new Date(b.dateTo) < now));
+        setCustomerUpcoming(
+          customerBookings.filter((b: Booking) => new Date(b.dateTo) >= now)
+        );
+        setCustomerPast(
+          customerBookings.filter((b: Booking) => new Date(b.dateTo) < now)
+        );
+        setVenueUpcoming(
+          managerVenueBookings.filter((b: Booking) => new Date(b.dateTo) >= now)
+        );
+        setVenuePast(
+          managerVenueBookings.filter((b: Booking) => new Date(b.dateTo) < now)
+        );
       } catch (err) {
         console.error("Failed to load bookings", err);
       } finally {
@@ -114,7 +150,8 @@ const BookingsList = () => {
 
   if (loading) return <p>Loading bookings...</p>;
 
-  const shouldShowCustomer = customerUpcoming.length > 0 || customerPast.length > 0;
+  const shouldShowCustomer =
+    customerUpcoming.length > 0 || customerPast.length > 0;
   const shouldShowVenue = venueUpcoming.length > 0 || venuePast.length > 0;
 
   return (
@@ -124,42 +161,50 @@ const BookingsList = () => {
           <div className="space-y-2 col-span-1">
             <h3 className="">Upcoming Venue Bookings</h3>
             <div className="grid gap-4">
-              {(venueUpcoming.length > 0 ? venueUpcoming : venuePast).slice(0, 4).map((booking) => (
-                <BookingCard key={booking.id} booking={booking} />
-              ))}
+              {(venueUpcoming.length > 0 ? venueUpcoming : venuePast)
+                .slice(0, 4)
+                .map((booking) => (
+                  <BookingCard key={booking.id} booking={booking} />
+                ))}
             </div>
-            {(venueUpcoming.length + venuePast.length) > 4 && (
+            {venueUpcoming.length + venuePast.length > 4 && (
               <div className="text-center">
-                <ReusableButton onClick={() => setModalOpen("venue")}>See All Bookings on My Venues</ReusableButton>
+                <ReusableButton onClick={() => setModalOpen("venue")}>
+                  See All Bookings on My Venues
+                </ReusableButton>
               </div>
             )}
           </div>
         )}
-  
+
         {shouldShowCustomer && (
           <div className="space-y-2 col-span-1 md:col-start-2">
             <h3 className="">My Upcoming Bookings</h3>
             <div className="grid gap-4">
-              {(customerUpcoming.length > 0 ? customerUpcoming : customerPast).slice(0, 4).map((booking) => (
-                <BookingCard key={booking.id} booking={booking} />
-              ))}
+              {(customerUpcoming.length > 0 ? customerUpcoming : customerPast)
+                .slice(0, 4)
+                .map((booking) => (
+                  <BookingCard key={booking.id} booking={booking} />
+                ))}
             </div>
-            {(customerUpcoming.length + customerPast.length) > 4 && (
+            {customerUpcoming.length + customerPast.length > 4 && (
               <div className="text-center pt-6">
-                <ReusableButton onClick={() => setModalOpen("customer")}>See All Bookings</ReusableButton>
+                <ReusableButton onClick={() => setModalOpen("customer")}>
+                  See All Bookings
+                </ReusableButton>
               </div>
             )}
           </div>
         )}
       </div>
-  
+
       <CustomerBookingsModal
         isOpen={modalOpen === "customer"}
         onClose={() => setModalOpen(null)}
         upcoming={customerUpcoming}
         past={customerPast}
       />
-  
+
       <VenueBookingsModal
         isOpen={modalOpen === "venue"}
         onClose={() => setModalOpen(null)}
@@ -168,7 +213,6 @@ const BookingsList = () => {
       />
     </div>
   );
-  
 };
 
 export default BookingsList;

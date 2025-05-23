@@ -5,29 +5,31 @@ import { useAuth } from "../../api/auth/useAuth";
 import { useState } from "react";
 import ReusableButton from "../ReusableButton";
 
-const schema = yup.object({
-  name: yup
-    .string()
-    .min(2, "Username must be at least 2 characters")
-    .required("Username is required"),
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/,
-      "Must use a stud.noroff.no email"
-    )
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords must match")
-    .required("Confirm password is required"),
-  venueManager: yup.boolean().optional(),
-}).required();
+const schema = yup
+  .object({
+    name: yup
+      .string()
+      .min(2, "Username must be at least 2 characters")
+      .required("Username is required"),
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/,
+        "Must use a stud.noroff.no email"
+      )
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required("Confirm password is required"),
+    venueManager: yup.boolean().optional(),
+  })
+  .required();
 
 type FormData = yup.InferType<typeof schema>;
 
@@ -46,6 +48,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: FormData) => {
     const { confirmPassword, ...profileData } = data;
+    void confirmPassword;
 
     try {
       await registerUser({
@@ -75,7 +78,9 @@ const RegisterForm = () => {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
         {errors.name && (
-          <p className="text-red-500 text-sm mt-1 pl-2">{errors.name.message}</p>
+          <p className="text-red-500 text-sm mt-1 pl-2">
+            {errors.name.message}
+          </p>
         )}
       </div>
 
@@ -87,7 +92,9 @@ const RegisterForm = () => {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mt-1 pl-2">{errors.email.message}</p>
+          <p className="text-red-500 text-sm mt-1 pl-2">
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -99,7 +106,9 @@ const RegisterForm = () => {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
         {errors.password && (
-          <p className="text-red-500 text-sm mt-1 pl-2">{errors.password.message}</p>
+          <p className="text-red-500 text-sm mt-1 pl-2">
+            {errors.password.message}
+          </p>
         )}
       </div>
 
@@ -111,18 +120,28 @@ const RegisterForm = () => {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
         {errors.confirmPassword && (
-          <p className="text-red-500 text-sm mt-1 pl-2">{errors.confirmPassword.message}</p>
+          <p className="text-red-500 text-sm mt-1 pl-2">
+            {errors.confirmPassword.message}
+          </p>
         )}
       </div>
 
       <div className="flex items-center space-x-2">
-        <input type="checkbox" {...register("venueManager")} id="venueManager" />
+        <input
+          type="checkbox"
+          {...register("venueManager")}
+          id="venueManager"
+        />
         <label htmlFor="venueManager" className="text-sm">
           Register as a Venue Manager
         </label>
       </div>
 
-      <ReusableButton type="submit" className="w-full rounded-lg" disabled={loading}>
+      <ReusableButton
+        type="submit"
+        className="w-full rounded-lg"
+        disabled={loading}
+      >
         {loading ? "Registering..." : "Register"}
       </ReusableButton>
 

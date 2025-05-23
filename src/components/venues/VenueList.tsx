@@ -31,7 +31,7 @@ function VenueList({ searchQuery, selectedDates }: VenueListProps) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const venueData = await getVenues();
+        const venueData: Venue[] = await getVenues();
         const sorted = venueData
           .slice()
           .sort(

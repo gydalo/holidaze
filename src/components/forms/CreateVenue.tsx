@@ -77,7 +77,7 @@ function CreateVenue({ onSuccess }: Props) {
       className="space-y-6 max-w-lg mx-auto p-4"
     >
       <h2 className="text-center mb-6">New Venue</h2>
-  
+
       <div>
         <h3 className="text-center pb-5">Venue Details</h3>
         <label className="block font-medium mb-1">Venue Name</label>
@@ -88,7 +88,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Venue Description</label>
         <textarea
@@ -98,7 +98,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Images</label>
         <div className="space-y-4">
@@ -135,7 +135,7 @@ function CreateVenue({ onSuccess }: Props) {
           </ReusableButton>
         </div>
       </div>
-  
+
       <div>
         <h3 className="text-center pb-5 pt-5">Venue Price and Capacity</h3>
         <label className="block font-medium mb-1">Price / Night (NOK)</label>
@@ -147,7 +147,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Max Guests</label>
         <input
@@ -158,7 +158,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div className="space-y-2">
         <h3 className="text-center pb-5 pt-5">Amenities</h3>
         <div className="flex justify-center gap-6 flex-wrap">
@@ -180,7 +180,7 @@ function CreateVenue({ onSuccess }: Props) {
           </label>
         </div>
       </div>
-  
+
       <div>
         <h3 className="text-center pb-5 pt-5">Venue Location</h3>
         <label className="block font-medium mb-1">Country</label>
@@ -191,7 +191,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">City</label>
         <input
@@ -201,7 +201,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Continent</label>
         <input
@@ -211,7 +211,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Address</label>
         <input
@@ -221,7 +221,7 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       <div>
         <label className="block font-medium mb-1">Zip Code</label>
         <input
@@ -231,9 +231,9 @@ function CreateVenue({ onSuccess }: Props) {
           className="w-full p-3 border rounded-lg"
         />
       </div>
-  
+
       {error && <p className="text-red-500 text-center">{error}</p>}
-  
+
       <ReusableButton type="submit" className="w-full rounded-lg">
         Create Venue
       </ReusableButton>
