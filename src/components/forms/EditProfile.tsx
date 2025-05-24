@@ -21,7 +21,12 @@ type FormData = {
 };
 
 function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -109,13 +114,23 @@ function EditProfileModal({ isOpen, onClose, profileName, onSuccess }: Props) {
         <div>
           <label className="block font-medium mb-1">Bio</label>
           <textarea
-            {...register("bio")}
+            {...register("bio", {
+              maxLength: {
+                value: 160,
+                message: "Bio cannot be longer than 160 characters",
+              },
+            })}
             placeholder="Tell us about yourself"
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
           />
         </div>
 
-        {error && <p className="text-red-500 text-center">{error}</p>}
+        {(error || errors.bio) && (
+          <div className="text-red-500 text-center space-y-1">
+            {errors.bio && <p>{errors.bio.message}</p>}
+            {error && <p>{error}</p>}
+          </div>
+        )}
 
         <ReusableButton type="submit" className="w-full rounded-lg">
           Save Changes
