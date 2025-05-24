@@ -122,7 +122,7 @@ function ProfilePage() {
                       Become a venue manager account
                     </span>
                   </label>
-                  <div className="mt-6 h-10 flex items-center justify-start">
+                  <div className="h-10 mt-4 flex items-center justify-center xs:justify-start">
                     <ReusableButton
                       onClick={handleSave}
                       disabled={saving}
@@ -138,7 +138,11 @@ function ProfilePage() {
                 </div>
               )}
             </div>
-            <div className="xs:mt-[5rem] flex gap-6 flex-col">
+            <div
+              className={`${
+                isVenueManager ? "xs:mt-[5rem]" : "xxs:mt-[5rem]"
+              } flex gap-6 flex-col`}
+            >
               <div>
                 <h2 className="text-2xl ">{profile.name}</h2>
                 <p className="text-gray-700">{profile.email}</p>
@@ -164,15 +168,15 @@ function ProfilePage() {
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row md:items-start gap-8 px-4 md:px-8 mt-6">
-        <div className="flex flex-col items-center md:items-start w-full md:w-1/3">
-          {isVenueManager && (
+      <div className="flex flex-col md:flex-row md:items-start gap-8 px-4 md:px-8 mt-20">
+        {isVenueManager && (
+          <div className="flex flex-col items-center md:items-start w-full md:w-1/3">
             <div className="w-full">
-              <h3 className=" text-lg mb-2">Venues</h3>
+              <h3 className="text-lg mb-2">Venues</h3>
               <OwnedVenues refreshKey={venuesChanged} />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="w-full">
           {message && <p className="text-sm mt-2">{message}</p>}

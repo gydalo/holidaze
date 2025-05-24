@@ -1,16 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-import defaultTheme from 'tailwindcss/defaultTheme';
+import defaultTheme from "tailwindcss/defaultTheme";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        alata: ['Alata', ...defaultTheme.fontFamily.sans],
-        lateef: ['Lateef', ...defaultTheme.fontFamily.sans],
+        alata: ["Alata", ...defaultTheme.fontFamily.sans],
+        lateef: ["Lateef", ...defaultTheme.fontFamily.sans],
       },
       screens: {
-        xs: "541px",
+        xs: "537px",
+        xxs: "398px",
       },
     },
   },

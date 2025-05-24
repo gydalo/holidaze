@@ -156,7 +156,11 @@ const BookingsList = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid md:grid-cols-2 gap-6">
+      <div
+        className={`grid gap-6 ${
+          shouldShowVenue ? "md:grid-cols-2" : "grid-cols-1 justify-center"
+        }`}
+      >
         {shouldShowVenue && (
           <div className="space-y-2 col-span-1">
             <h3 className="">Upcoming Venue Bookings</h3>
@@ -178,7 +182,11 @@ const BookingsList = () => {
         )}
 
         {shouldShowCustomer && (
-          <div className="space-y-2 col-span-1 md:col-start-2">
+          <div
+            className={`space-y-2 col-span-1 ${
+              shouldShowVenue ? "md:col-start-2" : "max-w-xl w-full"
+            }`}
+          >
             <h3 className="">My Upcoming Bookings</h3>
             <div className="grid gap-4">
               {(customerUpcoming.length > 0 ? customerUpcoming : customerPast)

@@ -51,12 +51,12 @@ function OwnedVenues({ refreshKey }: Props) {
     <div>
       <div className="flex flex-col gap-4">
         {ownedVenues.map((venue) => (
-          <Link key={venue.id} to={`/venue/${venue.id}`}>
-            <div>
+          <Link key={venue.id} to={`/venue/${venue.id}`} className="group">
+            <div className="mt-4 mb-2">
               <h3>{venue.name}</h3>
             </div>
             <img
-              className="h-48 w-full object-cover"
+              className="h-48 w-full object-cover transform transition-transform duration-300 group-hover:scale-105"
               src={venue.media?.[0]?.url || "/assets/images/placeholder.jpg"}
               alt={venue.media?.[0]?.alt || venue.name}
             />
