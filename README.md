@@ -1,6 +1,6 @@
 # Holidaze - Semester Project 2
 
-![image](https://ibb.co/zhjmPZz5)
+![image](https://i.postimg.cc/d0kBBgWJ/holidaze-screenshot1.png)
 
 Holidaze is a fake Airbnb-style web application where users can test booking and hosting functionality by registering and logging in with a @stud.noroff.no email. The page is designed to simulate a vacation rental platform, allowing users to experience both booking and managing venues.
 
