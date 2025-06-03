@@ -39,13 +39,13 @@ You can browse venues without an account, but to fully test the platform you can
 - Venue managers can also create and manage their own listings
 - Both users can change their bio, avatar and banner on their profile page.
 
-##Future Improvements
+## Future Improvements
 While I’m happy with how the project turned out, there are several areas I would like to improve going forward:
 - Cleaner code structure
 - Improved design
 
-###Cleaner Code Structure
+### Cleaner Code Structure
 As I’ve learned more about React and component organization, I see opportunities to refactor parts of the code to improve readability and reusability. For instance, some logic could be moved into smaller, more focused components.
 
-###Improved design
+### Improved design
 I often find myself struggling to feel fully satisfied with the final design of my projects. I tend to underestimate how much time the design phase will take, which sometimes leaves me without enough time to polish it the way I really want. In the future, I plan to set aside more time for design and aim to have a clear, complete design for all aspects of the page beforehand. I usually have a pretty solid general design idea, but I tend to overlook the smaller details. In this project I forgot to add both the venue managers own venues and the venues rented by the venue manager on the profile page, which made me have to design and implement that after the initial design should be done.
